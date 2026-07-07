@@ -24,4 +24,4 @@ Segurar Ctrl+P (configurável) grava áudio de verdade: widget entra em "ouvindo
 - [x] Listener global: keydown/keyup do combo → eventos ptt:press/ptt:release no renderer
 - [x] Captura de áudio: getUserMedia + MediaRecorder, blob no store ao soltar
 - [x] Waveform ao vivo com AnalyserNode substituindo a animação mock
-- [ ] Máquina ligada ao PTT (press→listening, release→mock) + keycap real + remover clique
+- [x] Máquina ligada ao PTT (press→listening, release→mock) + keycap real + remover clique
