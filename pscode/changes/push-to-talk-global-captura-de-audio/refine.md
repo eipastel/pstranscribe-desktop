@@ -19,7 +19,7 @@ Segurar Ctrl+P (configurável) grava áudio de verdade: widget entra em "ouvindo
 - Transcrição, formatação, colar no cursor, UI de settings (batch 5), troca de dispositivo de áudio.
 
 ## Subtasks
-- [ ] uiohook-napi instalado e carregando no main (com rebuild nativo se necessário)
+- [x] uiohook-napi instalado e carregando no main (com rebuild nativo se necessário)
 - [ ] Config persistida do keybind no userData (default Ctrl+P) + leitura exposta via IPC
 - [ ] Listener global: keydown/keyup do combo → eventos ptt:press/ptt:release no renderer
 - [ ] Captura de áudio: getUserMedia + MediaRecorder, blob no store ao soltar
