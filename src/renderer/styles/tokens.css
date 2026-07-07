@@ -1,0 +1,57 @@
+/* Design tokens — fonte: pscode/changes/layout-e-componentizacao-do-widget/design/
+   VoiceWidget.dc.html + VoiceSettings.dc.html. Grayscale only, sem cor de destaque. */
+:root {
+  /* Tipografia */
+  --font-stack: -apple-system, 'Inter', system-ui, sans-serif;
+  --text-label: 500 14.5px/1.3 var(--font-stack);
+  --text-sub: 400 11.5px/1.3 var(--font-stack);
+  --text-timer: 400 13px/1.3 var(--font-stack);
+  --text-raw: 400 13px/1.55 var(--font-stack);
+  --text-kbd: 600 11px/1.3 var(--font-stack);
+
+  /* Cores de texto (grayscale sobre vidro escuro) */
+  --fg: #f4f4f6;
+  --fg-sub: rgba(255, 255, 255, 0.5);
+  --fg-hint: rgba(255, 255, 255, 0.42);
+  --fg-timer: rgba(255, 255, 255, 0.72);
+  --fg-kbd: rgba(255, 255, 255, 0.62);
+
+  /* Vidro (glass) */
+  --glass-bg: rgba(30, 30, 33, 0.62);
+  --glass-blur: blur(34px) saturate(1.3);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-hover: rgba(255, 255, 255, 0.22);
+  --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+
+  /* Superfícies internas (mic, kbd, dot) */
+  --surface-bg: rgba(255, 255, 255, 0.1);
+  --surface-border: rgba(255, 255, 255, 0.16);
+  --surface-soft-bg: rgba(255, 255, 255, 0.08);
+  --surface-soft-border: rgba(255, 255, 255, 0.1);
+
+  /* Toggle (VoiceSettings) */
+  --toggle-track: rgba(255, 255, 255, 0.13);
+  --toggle-track-border: rgba(255, 255, 255, 0.1);
+  --toggle-track-on: rgba(255, 255, 255, 0.92);
+  --toggle-track-border-on: rgba(255, 255, 255, 0.5);
+  --toggle-knob: #fff;
+  --toggle-knob-on: #1c1c1e;
+
+  /* Movimento */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-morph: 0.42s;
+  --duration-soft: 0.28s;
+
+  /* Dimensões da pílula */
+  --pill-width: 460px;
+  --pill-height: 64px;
+  --pill-height-tall: 104px;
+  --pill-radius: 16px;
+  --pill-radius-tall: 18px;
+
+  /* Espaçamento */
+  --space-row-gap: 14px;
+  --space-row-pad: 0 17px 0 15px;
+  --space-col-pad: 0 19px;
+  --space-hint-gap: 13px;
+}
