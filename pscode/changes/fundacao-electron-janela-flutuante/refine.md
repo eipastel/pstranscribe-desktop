@@ -21,7 +21,7 @@ Deixar o projeto rodando na raiz do repositório: `npm run dev` abre uma pílula
 - Captura de áudio, keybind global, visual final do widget, empacotamento/distribuição real.
 
 ## Subtasks
-- [ ] Scaffold electron-vite (React + TS) na raiz com a estrutura de pastas definida
+- [x] Scaffold electron-vite (React + TS) na raiz com a estrutura de pastas definida
 - [ ] Tooling: ESLint + Prettier, path aliases `@/`, hot-reload no main e no renderer
 - [ ] Janela flutuante: transparente, sem frame, alwaysOnTop, skipTaskbar, posição Spotlight, click-through
 - [ ] Preload + IPC segura com contextIsolation e contextBridge mínimo
