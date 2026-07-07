@@ -19,3 +19,10 @@ body {
   font: var(--text-label);
   color: var(--fg);
 }
+
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 12px;
+}

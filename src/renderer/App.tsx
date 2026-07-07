@@ -1,14 +1,12 @@
 import { useEffect } from 'react'
-import { useWidgetStore } from '@/state/widget'
+import VoiceWidget from '@/features/voice-widget/VoiceWidget'
 
 function App(): React.JSX.Element {
-  const status = useWidgetStore((s) => s.status)
-
   useEffect(() => {
     void window.api.ping()
   }, [])
 
-  return <div className="pill" data-status={status} />
+  return <VoiceWidget />
 }
 
 export default App
