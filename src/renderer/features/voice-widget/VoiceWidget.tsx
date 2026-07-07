@@ -7,6 +7,7 @@ import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
 import CheckIcon from '@/components/CheckIcon/CheckIcon'
 import { useWidgetStore, type WidgetStatus } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
+import { useRecording } from './useRecording'
 
 // Texto mock do design (VoiceWidget.dc.html); a transcrição real vem em batch futura
 const RAW_TEXT =
@@ -44,6 +45,7 @@ function VoiceWidget(): React.JSX.Element {
   const elapsed = useWidgetStore((s) => s.elapsed)
   const tap = useWidgetStore((s) => s.tap)
   const hoverHandlers = useClickThrough()
+  useRecording()
 
   return (
     <div className="voice-widget">

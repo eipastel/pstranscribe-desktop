@@ -22,6 +22,6 @@ Segurar Ctrl+P (configurável) grava áudio de verdade: widget entra em "ouvindo
 - [x] uiohook-napi instalado e carregando no main (com rebuild nativo se necessário)
 - [x] Config persistida do keybind no userData (default Ctrl+P) + leitura exposta via IPC
 - [x] Listener global: keydown/keyup do combo → eventos ptt:press/ptt:release no renderer
-- [ ] Captura de áudio: getUserMedia + MediaRecorder, blob no store ao soltar
+- [x] Captura de áudio: getUserMedia + MediaRecorder, blob no store ao soltar
 - [ ] Waveform ao vivo com AnalyserNode substituindo a animação mock
 - [ ] Máquina ligada ao PTT (press→listening, release→mock) + keycap real + remover clique

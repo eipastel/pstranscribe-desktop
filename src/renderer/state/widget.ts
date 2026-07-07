@@ -8,6 +8,8 @@ const REFINE_MOCK_MS = 2100
 interface WidgetState {
   status: WidgetStatus
   elapsed: number
+  audioBlob: Blob | null
+  setAudioBlob: (blob: Blob | null) => void
   tap: () => void
 }
 
@@ -17,6 +19,8 @@ let doneTimeout: ReturnType<typeof setTimeout> | undefined
 export const useWidgetStore = create<WidgetState>((set, get) => ({
   status: 'idle',
   elapsed: 0,
+  audioBlob: null,
+  setAudioBlob: (blob) => set({ audioBlob: blob }),
   tap: () => {
     const { status } = get()
     if (status === 'idle') {
