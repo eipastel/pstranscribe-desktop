@@ -1,6 +1,6 @@
 import './Waveform.css'
 
-const BARS = Array.from({ length: 32 }, (_, i) => ({
+const BARS = Array.from({ length: 64 }, (_, i) => ({
   height: 22 + Math.round(18 * Math.abs(Math.sin(i * 1.7))),
   delay: (i * 0.06).toFixed(2)
 }))
