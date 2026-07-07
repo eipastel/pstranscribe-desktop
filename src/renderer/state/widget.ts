@@ -9,7 +9,9 @@ interface WidgetState {
   status: WidgetStatus
   elapsed: number
   audioBlob: Blob | null
+  micStream: MediaStream | null
   setAudioBlob: (blob: Blob | null) => void
+  setMicStream: (stream: MediaStream | null) => void
   tap: () => void
 }
 
@@ -20,7 +22,9 @@ export const useWidgetStore = create<WidgetState>((set, get) => ({
   status: 'idle',
   elapsed: 0,
   audioBlob: null,
+  micStream: null,
   setAudioBlob: (blob) => set({ audioBlob: blob }),
+  setMicStream: (stream) => set({ micStream: stream }),
   tap: () => {
     const { status } = get()
     if (status === 'idle') {

@@ -6,9 +6,12 @@ import { startRecording, stopRecording } from './recorder'
 export function useRecording(): void {
   useEffect(() => {
     const offPress = window.api.onPttPress(() => {
-      void startRecording().catch((err) => console.error('mic:', err))
+      void startRecording()
+        .then((stream) => useWidgetStore.getState().setMicStream(stream))
+        .catch((err) => console.error('mic:', err))
     })
     const offRelease = window.api.onPttRelease(() => {
+      useWidgetStore.getState().setMicStream(null)
       void stopRecording().then((blob) => {
         if (!blob) return
         useWidgetStore.getState().setAudioBlob(blob)

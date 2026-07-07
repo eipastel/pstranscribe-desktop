@@ -8,6 +8,7 @@ import CheckIcon from '@/components/CheckIcon/CheckIcon'
 import { useWidgetStore, type WidgetStatus } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
 import { useRecording } from './useRecording'
+import { useMicLevels } from './useMicLevels'
 
 // Texto mock do design (VoiceWidget.dc.html); a transcrição real vem em batch futura
 const RAW_TEXT =
@@ -44,8 +45,10 @@ function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
   const tap = useWidgetStore((s) => s.tap)
+  const micStream = useWidgetStore((s) => s.micStream)
   const hoverHandlers = useClickThrough()
   useRecording()
+  const levels = useMicLevels(micStream)
 
   return (
     <div className="voice-widget">
@@ -68,7 +71,7 @@ function VoiceWidget(): React.JSX.Element {
             <div className="vw-row">
               <span className="vw-dot" aria-hidden="true" />
               <div className="vw-wave">
-                <Waveform />
+                <Waveform levels={levels} />
               </div>
               <Timer seconds={elapsed} />
             </div>
