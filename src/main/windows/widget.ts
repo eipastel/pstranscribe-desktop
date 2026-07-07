@@ -39,6 +39,13 @@ export function createWidgetWindow(): BrowserWindow {
 
   window.on('ready-to-show', () => window.show())
 
+  if (is.dev) {
+    // Espelha o console do renderer no terminal do dev
+    window.webContents.on('console-message', (_event, _level, message) => {
+      console.log('[renderer]', message)
+    })
+  }
+
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     window.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {

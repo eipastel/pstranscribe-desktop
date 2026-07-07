@@ -1,4 +1,5 @@
 import './VoiceWidget.css'
+import { useEffect, useState } from 'react'
 import Pill from '@/components/Pill/Pill'
 import Waveform from '@/components/Waveform/Waveform'
 import StatusLabel from '@/components/StatusLabel/StatusLabel'
@@ -7,14 +8,17 @@ import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
 import CheckIcon from '@/components/CheckIcon/CheckIcon'
 import { useWidgetStore, type WidgetStatus } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
+import { useRecording } from './useRecording'
+import { useMicLevels } from './useMicLevels'
+import { keybindParts } from '@shared/settings'
 
 // Texto mock do design (VoiceWidget.dc.html); a transcrição real vem em batch futura
 const RAW_TEXT =
   'então tipo assim ó eu queria ah marcar tipo uma reunião sabe com o pessoal de vendas pra semana que vem talvez quinta e ah acho que umas três da tarde'
 
 const HINTS: Record<WidgetStatus, string> = {
-  idle: 'Clique no widget para começar a falar',
-  listening: 'Clique para parar e transcrever',
+  idle: 'Segure o atalho para falar',
+  listening: 'Solte para transcrever',
   transcribing: 'A IA está enxugando o texto…',
   done: 'Texto tratado colado onde o cursor estava'
 }
@@ -42,13 +46,20 @@ function MicIcon(): React.JSX.Element {
 function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
-  const tap = useWidgetStore((s) => s.tap)
+  const micStream = useWidgetStore((s) => s.micStream)
   const hoverHandlers = useClickThrough()
+  useRecording()
+  const levels = useMicLevels(micStream)
+
+  const [keyParts, setKeyParts] = useState<string[]>([])
+  useEffect(() => {
+    void window.api.getSettings().then((s) => setKeyParts(keybindParts(s.keybind)))
+  }, [])
 
   return (
     <div className="voice-widget">
       <div {...hoverHandlers}>
-        <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]} onClick={tap}>
+        <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]}>
           {status === 'idle' && (
             <div className="vw-row">
               <MicIcon />
@@ -57,8 +68,9 @@ function VoiceWidget(): React.JSX.Element {
                 subtitle="A IA deixa sua mensagem enxuta"
               />
               <span className="vw-kbd">
-                <span>⌥</span>
-                <span>Space</span>
+                {keyParts.map((part) => (
+                  <span key={part}>{part}</span>
+                ))}
               </span>
             </div>
           )}
@@ -66,7 +78,7 @@ function VoiceWidget(): React.JSX.Element {
             <div className="vw-row">
               <span className="vw-dot" aria-hidden="true" />
               <div className="vw-wave">
-                <Waveform />
+                <Waveform levels={levels} />
               </div>
               <Timer seconds={elapsed} />
             </div>
@@ -84,7 +96,10 @@ function VoiceWidget(): React.JSX.Element {
           {status === 'done' && (
             <div className="vw-row">
               <CheckIcon />
-              <StatusLabel title="Colado no cursor" subtitle="Clique para gravar de novo" />
+              <StatusLabel
+                title="Colado no cursor"
+                subtitle="Segure o atalho para gravar de novo"
+              />
             </div>
           )}
         </Pill>

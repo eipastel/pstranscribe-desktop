@@ -24,8 +24,12 @@
   }
 }
 
+.waveform-bar.is-live {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .waveform-bar {
+  .waveform-bar:not(.is-live) {
     animation: none;
     transform: scaleY(0.6);
   }
