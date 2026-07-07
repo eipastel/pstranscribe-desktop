@@ -1,0 +1,33 @@
+/* Campo glass — validação em grayscale: borda + dot, sem vermelho/verde */
+.input-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-soft-bg);
+  border: 1px solid var(--surface-soft-border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: border-color var(--duration-soft);
+}
+
+.input-field:focus-within {
+  border-color: var(--glass-border-hover);
+}
+
+.input-field[data-status='error'] {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.input-field-control {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font: 400 13px/1.4 var(--font-stack);
+}
+
+.input-field-control::placeholder {
+  color: var(--fg-hint);
+}

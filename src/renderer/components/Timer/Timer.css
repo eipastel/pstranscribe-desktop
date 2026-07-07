@@ -1,0 +1,6 @@
+.timer {
+  font: var(--text-timer);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-timer);
+  min-width: 38px;
+}

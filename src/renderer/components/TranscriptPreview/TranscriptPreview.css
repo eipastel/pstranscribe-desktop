@@ -1,0 +1,35 @@
+.transcript-preview {
+  font: var(--text-raw);
+  color: var(--fg-sub);
+  position: relative;
+  overflow: hidden;
+}
+
+.transcript-preview-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: transcript-shimmer 1.4s linear infinite;
+}
+
+@keyframes transcript-shimmer {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transcript-preview-shimmer {
+    animation: none;
+    opacity: 0;
+  }
+}

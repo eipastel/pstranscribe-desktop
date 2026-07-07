@@ -1,0 +1,29 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--surface-soft-bg);
+  border: 1px solid var(--surface-soft-border);
+  color: var(--fg);
+  font: 500 13px/1.3 var(--font-stack);
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  transition: border-color var(--duration-soft);
+}
+
+.button:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--fg-sub);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.38;
+  pointer-events: none;
+}

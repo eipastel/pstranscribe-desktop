@@ -1,0 +1,57 @@
+/* Toggle estilo iOS em cinzas — track branco/knob escuro quando ligado (VoiceSettings) */
+.toggle {
+  flex: none;
+  width: 46px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--toggle-track);
+  border: 1px solid var(--toggle-track-border);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--duration-soft) var(--ease-spring);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--fg-sub);
+  outline-offset: 2px;
+}
+
+.toggle:disabled {
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.toggle[aria-checked='true'] {
+  background: var(--toggle-track-on);
+  border-color: var(--toggle-track-border-on);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--toggle-knob);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.45),
+    0 0 0 0.5px rgba(0, 0, 0, 0.1);
+  transform: translateY(-50%);
+  transition:
+    transform var(--duration-soft) var(--ease-spring),
+    background var(--duration-soft);
+}
+
+.toggle[aria-checked='true'] .toggle-knob {
+  transform: translate(18px, -50%);
+  background: var(--toggle-knob-on);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle,
+  .toggle-knob {
+    transition: none;
+  }
+}

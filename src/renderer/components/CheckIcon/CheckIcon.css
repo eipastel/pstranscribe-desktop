@@ -1,0 +1,16 @@
+.icon-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+}
+
+.icon-chip svg {
+  width: 16px;
+  height: 16px;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+.scene{position:relative;width:1180px;height:720px;overflow:hidden;border-radius:14px;background:radial-gradient(120% 120% at 20% 0%,#3a3a3e 0%,#232326 45%,#131315 100%);font-family:-apple-system,'Inter',system-ui,sans-serif;color:#f2f2f4;user-select:none}
+.bgslot{position:absolute;inset:0;z-index:0}
+.spot{position:absolute;left:50%;top:130px;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:13px}
+.widget{position:relative;background:rgba(30,30,33,.62);backdrop-filter:blur(34px) saturate(1.3);-webkit-backdrop-filter:blur(34px) saturate(1.3);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.12) inset;color:#f4f4f6;cursor:pointer;transition:width .42s cubic-bezier(.32,.72,0,1),height .42s cubic-bezier(.32,.72,0,1),border-radius .42s cubic-bezier(.32,.72,0,1),background .3s}
+.widget:hover{border-color:rgba(255,255,255,.22)}
+.wrow{display:flex;align-items:center;gap:14px;height:100%;padding:0 17px 0 15px}
+.wtxt{flex:1;min-width:0}
+.wcol{display:flex;flex-direction:column;justify-content:center;height:100%;gap:12px;padding:0 19px}
+.craux{margin-left:auto;margin-top:0}
+.wfwrap{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;gap:0}
+.mic{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+.mic svg{width:16px;height:16px}
+.wlabel{font-size:14.5px;font-weight:500;letter-spacing:.1px;white-space:nowrap}
+.wsub{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:1px}
+.kbd{margin-left:6px;display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);font-size:11px;color:rgba(255,255,255,.62);font-weight:600}
+.wf{display:flex;align-items:center;gap:2.5px;height:30px}
+.wfbar{width:2.5px;border-radius:2px;background:linear-gradient(180deg,#fff,rgba(255,255,255,.55));animation:wf 1s ease-in-out infinite;transform-origin:center}
+@keyframes wf{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.timer{font-size:13px;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.72);min-width:38px}
+.dotpulse{width:8px;height:8px;border-radius:50%;background:#fff;flex:none;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1)}}
+.rawtext{font-size:13px;line-height:1.55;color:rgba(255,255,255,.5);position:relative;overflow:hidden}
+.shimmer{position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.22) 50%,transparent 70%);background-size:200% 100%;animation:sh 1.4s linear infinite}
+@keyframes sh{0%{background-position:180% 0}100%{background-position:-80% 0}}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stack{display:flex;flex-direction:column;justify-content:center;height:100%;padding:14px 18px;gap:10px}
+.crow{display:flex;align-items:center;gap:10px}
+.hint{font-size:11.5px;color:rgba(255,255,255,.42);letter-spacing:.1px}
+.wglow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:760px;height:340px;background:radial-gradient(60% 70% at 50% 0,rgba(255,255,255,.05),transparent 72%);pointer-events:none;z-index:1}
+</style></helmet><div class="scene"><div class="bgslot"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="{{ slotId }}" shape="rect" placeholder="Arraste aqui um print da sua área de trabalho" hint-size="100%,100%"></x-import></div><div class="wglow"></div><div class="spot">{{ widget }}<div class="hint">{{ hint }}</div></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:720},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pill&quot;,&quot;card&quot;],&quot;default&quot;:&quot;pill&quot;,&quot;tsType&quot;:&quot;'pill'|'card'&quot;}}">
+class Component extends DCLogic {
+  state = { st: 'idle', elapsed: 0 };
+  constructor(p){ super(p); this.bars = Array.from({length:32},(_,i)=>({h:22+Math.round(18*Math.abs(Math.sin(i*1.7))),d:(i*0.06).toFixed(2)})); }
+  componentWillUnmount(){ this.clear(); }
+  clear(){ clearInterval(this._iv); clearTimeout(this._to); }
+  tap = () => {
+    const s = this.state.st;
+    if (s === 'idle'){ this.setState({st:'listening',elapsed:0}); this._iv=setInterval(()=>this.setState(x=>({elapsed:x.elapsed+1})),1000); }
+    else if (s === 'listening'){ clearInterval(this._iv); this.setState({st:'transcribing'}); this._to=setTimeout(()=>this.setState({st:'done'}),2100); }
+    else if (s === 'done'){ this.clear(); this.setState({st:'idle',elapsed:0}); }
+  };
+  fmt(n){ const m=String(Math.floor(n/60)).padStart(1,'0'); const s=String(n%60).padStart(2,'0'); return m+':'+s; }
+  renderVals(){
+    const st = this.state.st;
+    const variant = this.props.variant || 'pill';
+    const card = variant === 'card';
+    const R = React.createElement;
+    const cleanText = 'Vamos marcar uma call com o time de vendas na quinta que vem, umas 15h?';
+    const rawText = 'então tipo assim ó eu queria ah marcar tipo uma reunião sabe com o pessoal de vendas pra semana que vem talvez quinta e ah acho que umas três da tarde';
+    const mic = R('span',{className:'mic'}, R('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round'},
+      R('rect',{x:9,y:3,width:6,height:11,rx:3}), R('path',{d:'M5 11a7 7 0 0 0 14 0'}), R('line',{x1:12,y1:18,x2:12,y2:21})));
+    const wave = R('div',{className:'wf'}, this.bars.map((b,i)=>R('span',{key:i,className:'wfbar',style:{height:b.h+'px',animationDelay:b.d+'s'}})));
+
+    const check = R('span',{className:'mic'}, R('svg',{viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2.2,strokeLinecap:'round',strokeLinejoin:'round'}, R('path',{d:'M5 13l4 4L19 7'})));
+    const fmt = this.fmt(this.state.elapsed);
+    const W = card ? 420 : 460;
+    let inner, h, radius = 16;
+    if (st === 'idle'){
+      inner = R('div',{className:'wrow'}, mic,
+        R('div',{className:'wtxt'}, R('div',{className:'wlabel'},'Falar para transcrever'), R('div',{className:'wsub'},'A IA deixa sua mensagem enxuta')),
+        R('span',{className:'kbd'}, R('span',null,'⌥'), R('span',null,'Space')));
+      h = card ? 76 : 64;
+    } else if (st === 'listening'){
+      if (card){
+        inner = R('div',{className:'wcol'},
+          R('div',{className:'crow'}, R('span',{className:'dotpulse'}), R('span',{className:'wlabel'},'Ouvindo'), R('span',{className:'timer craux'}, fmt)),
+          R('div',{className:'wfwrap'}, wave));
+        h = 118; radius = 18;
+      } else {
+        inner = R('div',{className:'wrow'}, R('span',{className:'dotpulse'}), R('div',{className:'wfwrap'}, wave), R('span',{className:'timer'}, fmt));
+        h = 64;
+      }
+    } else if (st === 'transcribing'){
+      inner = R('div',{className:'wcol'},
+        R('div',{className:'crow'}, R('span',{className:'spin'}), R('span',{className:'wlabel'},'Refinando com IA'), R('span',{className:'wsub craux'},'transcrição bruta')),
+        R('div',{className:'rawtext'}, rawText, R('span',{className:'shimmer'})));
+      h = card ? 134 : 104; radius = 18;
+    } else {
+      inner = R('div',{className:'wrow'}, check,
+        R('div',{className:'wtxt'}, R('div',{className:'wlabel'},'Colado no cursor'), R('div',{className:'wsub'},'Clique para gravar de novo')));
+      h = card ? 76 : 64;
+    }
+    const widget = R('div',{className:'widget', onClick:this.tap, style:{width:W+'px',height:h+'px',borderRadius:radius+'px'}}, inner);
+
+    const hints = {idle:'Clique no widget para começar a falar', listening:'Clique para parar e transcrever', transcribing:'A IA está enxugando o texto…', done:'Texto tratado colado onde o cursor estava'};
+    return { widget, slotId: 'desk-'+variant, hint: hints[st] };
+  }
+}
+</script>
+</body>
+</html>
