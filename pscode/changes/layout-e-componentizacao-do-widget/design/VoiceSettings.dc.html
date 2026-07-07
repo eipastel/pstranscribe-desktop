@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+.scene{position:relative;width:1180px;height:720px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 20% 0%,#3a3a3e 0%,#232326 45%,#131315 100%);font-family:-apple-system,'Inter',system-ui,sans-serif;color:#f2f2f4;user-select:none}
+.glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:760px;height:360px;background:radial-gradient(60% 70% at 50% 0,rgba(255,255,255,.05),transparent 72%);pointer-events:none}
+.panel{position:relative;width:452px;border-radius:20px;overflow:hidden;background:rgba(26,26,29,.62);backdrop-filter:blur(40px) saturate(1.4);-webkit-backdrop-filter:blur(40px) saturate(1.4);border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 90px -18px rgba(0,0,0,.65),0 2px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14)}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:46%;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+.phead{padding:24px 26px 20px;border-bottom:1px solid rgba(255,255,255,.08);position:relative}
+.gear{position:absolute;top:24px;right:24px;width:26px;height:26px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.gear svg{width:14px;height:14px;color:rgba(255,255,255,.7)}
+.ptitle{font-size:17px;font-weight:600;letter-spacing:.1px}
+.psub{font-size:12.5px;color:rgba(255,255,255,.5);margin-top:3px}
+.pbody{padding:6px 26px 18px;position:relative}
+.srow{display:flex;align-items:center;gap:18px;padding:19px 0}
+.srow2{border-top:1px solid rgba(255,255,255,.07)}
+.dim{opacity:.38;pointer-events:none}
+.stxt{flex:1;min-width:0}
+.slabel{font-size:14.5px;font-weight:500;letter-spacing:.1px}
+.sdesc{font-size:12px;line-height:1.45;color:rgba(255,255,255,.5);margin-top:3px}
+.sw{flex:none;width:46px;height:28px;border-radius:999px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.1);position:relative;cursor:pointer;transition:background .28s cubic-bezier(.32,.72,0,1)}
+.sw.on{background:rgba(255,255,255,.92);border-color:rgba(255,255,255,.5)}
+.knob{position:absolute;top:50%;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.45),0 0 0 .5px rgba(0,0,0,.1);transform:translateY(-50%);transition:transform .28s cubic-bezier(.32,.72,0,1),background .28s}
+.sw.on .knob{transform:translate(18px,-50%);background:#1c1c1e}
+</style></helmet><div class="scene"><div class="glow"></div><div class="panel"><div class="phead"><div class="gear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div><div class="ptitle">Transcrição por voz</div><div class="psub">Ajuste como sua fala vira mensagem</div></div><div class="pbody"><div class="srow"><div class="stxt"><div class="slabel">Transcrever</div><div class="sdesc">Converte sua fala em texto automaticamente</div></div><div class="{{ swT }}" onClick="{{ toggleT }}"><span class="knob"></span></div></div><div class="{{ rowF }}"><div class="stxt"><div class="slabel">Formatar</div><div class="sdesc">Enxuga a mensagem mantendo o jeito humano de escrever, com IA</div></div><div class="{{ swF }}" onClick="{{ toggleF }}"><span class="knob"></span></div></div></div></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:720}}">
+class Component extends DCLogic {
+  state = { transcrever: true, formatar: true };
+  renderVals(){
+    const t = this.state.transcrever, f = this.state.formatar;
+    return {
+      swT: t ? 'sw on' : 'sw',
+      swF: (t && f) ? 'sw on' : 'sw',
+      rowF: t ? 'srow srow2' : 'srow srow2 dim',
+      toggleT: () => this.setState(s => ({ transcrever: !s.transcrever })),
+      toggleF: () => this.setState(s => ({ formatar: !s.formatar })),
+    };
+  }
+}
+</script>
+</body>
+</html>
