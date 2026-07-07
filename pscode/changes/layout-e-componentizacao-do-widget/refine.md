@@ -21,7 +21,7 @@ O widget do design vivo em React: pílula dark glass com 4 estados visuais (ocio
 
 ## Subtasks
 - [x] Tokens de design centralizados em `styles/tokens.css`, extraídos de VoiceWidget/VoiceSettings
-- [ ] Componentes do widget: Pill, Waveform, StatusLabel, Timer, TranscriptPreview, CheckIcon
+- [x] Componentes do widget: Pill, Waveform, StatusLabel, Timer, TranscriptPreview, CheckIcon
 - [ ] Máquina de estados no Zustand (idle→listening→transcribing→done) com timer e avanço por mock
 - [ ] Composição VoiceWidget: 4 estados fiéis ao design, hint, reduced-motion e foco de teclado
 - [ ] Janela 520×220 + click-through com toggle por hover via IPC

@@ -1,0 +1,16 @@
+.status-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.status-label-title {
+  font: var(--text-label);
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.status-label-sub {
+  font: var(--text-sub);
+  color: var(--fg-sub);
+  margin-top: 1px;
+}

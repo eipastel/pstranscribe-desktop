@@ -1,0 +1,20 @@
+import './CheckIcon.css'
+
+function CheckIcon(): React.JSX.Element {
+  return (
+    <span className="icon-chip" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2.2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M5 13l4 4L19 7" />
+      </svg>
+    </span>
+  )
+}
+
+export default CheckIcon

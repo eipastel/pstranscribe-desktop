@@ -1,0 +1,31 @@
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+  height: 30px;
+}
+
+.waveform-bar {
+  width: 2.5px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0.55));
+  animation: waveform-bounce 1s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes waveform-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waveform-bar {
+    animation: none;
+    transform: scaleY(0.6);
+  }
+}

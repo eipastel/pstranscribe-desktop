@@ -16,10 +16,6 @@ body {
   background: transparent;
   overflow: hidden;
   user-select: none;
-}
-
-.pill {
-  height: 100%;
-  border-radius: 9999px;
-  background: rgba(20, 20, 20, 0.35);
+  font: var(--text-label);
+  color: var(--fg);
 }
