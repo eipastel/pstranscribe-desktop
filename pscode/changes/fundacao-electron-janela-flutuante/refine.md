@@ -25,5 +25,5 @@ Deixar o projeto rodando na raiz do repositório: `npm run dev` abre uma pílula
 - [x] Tooling: ESLint + Prettier, path aliases `@/`, hot-reload no main e no renderer
 - [ ] Janela flutuante: transparente, sem frame, alwaysOnTop, skipTaskbar, posição Spotlight, click-through
 - [x] Preload + IPC segura com contextIsolation e contextBridge mínimo
-- [ ] Zustand com store de exemplo em `src/renderer/state/`
+- [x] Zustand com store de exemplo em `src/renderer/state/`
 - [ ] Configurar electron-builder (sem empacotar)
