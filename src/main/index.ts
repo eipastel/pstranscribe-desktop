@@ -3,6 +3,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWidgetWindow } from './windows/widget'
 import { registerIpcHandlers } from './ipc/handlers'
 import { loadSettings } from './settings'
+import { startPushToTalk } from './ptt'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.eipastel.pstranscribe')
@@ -11,9 +12,10 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  console.log('settings:', JSON.stringify(loadSettings()))
+  const settings = loadSettings()
   registerIpcHandlers()
-  createWidgetWindow()
+  const window = createWidgetWindow()
+  startPushToTalk(window, settings.keybind)
 })
 
 app.on('window-all-closed', () => {
