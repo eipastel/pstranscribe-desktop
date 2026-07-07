@@ -2,8 +2,9 @@ import { BrowserWindow, screen } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-const WIDTH = 400
-const HEIGHT = 60
+// 520×220: cabe a pílula de 460px nos estados altos (104px) + hint + sombra do vidro
+const WIDTH = 520
+const HEIGHT = 220
 const TOP_RATIO = 0.15 // posição estilo Spotlight: topo a ~15% da altura da tela
 
 export function createWidgetWindow(): BrowserWindow {
@@ -22,7 +23,6 @@ export function createWidgetWindow(): BrowserWindow {
     alwaysOnTop: true,
     skipTaskbar: true,
     resizable: false,
-    focusable: false,
     hasShadow: false,
     autoHideMenuBar: true,
     webPreferences: {
@@ -31,7 +31,10 @@ export function createWidgetWindow(): BrowserWindow {
     }
   })
 
-  // ponytail: click-through fixo; toggle via IPC quando o widget ganhar interação
+  // Click-through por padrão; o renderer desliga via IPC quando o cursor entra na pílula.
+  // ponytail: no Windows o forward de mousemove não chega com o ignore ativo (limitação
+  // do Electron em janela transparente) — o hover-toggle fica inerte até revisitarmos
+  // (ex.: polling de cursor no main) numa batch futura.
   window.setIgnoreMouseEvents(true, { forward: true })
 
   window.on('ready-to-show', () => window.show())

@@ -6,6 +6,7 @@ import Timer from '@/components/Timer/Timer'
 import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
 import CheckIcon from '@/components/CheckIcon/CheckIcon'
 import { useWidgetStore, type WidgetStatus } from '@/state/widget'
+import { useClickThrough } from '@/hooks/useClickThrough'
 
 // Texto mock do design (VoiceWidget.dc.html); a transcrição real vem em batch futura
 const RAW_TEXT =
@@ -42,46 +43,52 @@ function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
   const tap = useWidgetStore((s) => s.tap)
+  const hoverHandlers = useClickThrough()
 
   return (
     <div className="voice-widget">
-      <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]} onClick={tap}>
-        {status === 'idle' && (
-          <div className="vw-row">
-            <MicIcon />
-            <StatusLabel title="Falar para transcrever" subtitle="A IA deixa sua mensagem enxuta" />
-            <span className="vw-kbd">
-              <span>⌥</span>
-              <span>Space</span>
-            </span>
-          </div>
-        )}
-        {status === 'listening' && (
-          <div className="vw-row">
-            <span className="vw-dot" aria-hidden="true" />
-            <div className="vw-wave">
-              <Waveform />
+      <div {...hoverHandlers}>
+        <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]} onClick={tap}>
+          {status === 'idle' && (
+            <div className="vw-row">
+              <MicIcon />
+              <StatusLabel
+                title="Falar para transcrever"
+                subtitle="A IA deixa sua mensagem enxuta"
+              />
+              <span className="vw-kbd">
+                <span>⌥</span>
+                <span>Space</span>
+              </span>
             </div>
-            <Timer seconds={elapsed} />
-          </div>
-        )}
-        {status === 'transcribing' && (
-          <div className="vw-col">
-            <div className="vw-crow">
-              <span className="vw-spin" aria-hidden="true" />
-              <span className="vw-title">Refinando com IA</span>
-              <span className="vw-aux">transcrição bruta</span>
+          )}
+          {status === 'listening' && (
+            <div className="vw-row">
+              <span className="vw-dot" aria-hidden="true" />
+              <div className="vw-wave">
+                <Waveform />
+              </div>
+              <Timer seconds={elapsed} />
             </div>
-            <TranscriptPreview text={RAW_TEXT} />
-          </div>
-        )}
-        {status === 'done' && (
-          <div className="vw-row">
-            <CheckIcon />
-            <StatusLabel title="Colado no cursor" subtitle="Clique para gravar de novo" />
-          </div>
-        )}
-      </Pill>
+          )}
+          {status === 'transcribing' && (
+            <div className="vw-col">
+              <div className="vw-crow">
+                <span className="vw-spin" aria-hidden="true" />
+                <span className="vw-title">Refinando com IA</span>
+                <span className="vw-aux">transcrição bruta</span>
+              </div>
+              <TranscriptPreview text={RAW_TEXT} />
+            </div>
+          )}
+          {status === 'done' && (
+            <div className="vw-row">
+              <CheckIcon />
+              <StatusLabel title="Colado no cursor" subtitle="Clique para gravar de novo" />
+            </div>
+          )}
+        </Pill>
+      </div>
       <div className="vw-hint">{HINTS[status]}</div>
     </div>
   )
