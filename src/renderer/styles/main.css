@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+}
+
+.pill {
+  height: 100%;
+  border-radius: 9999px;
+  background: rgba(20, 20, 20, 0.35);
+}
