@@ -1,8 +1,7 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
+import type { WidgetApi } from '../shared/ipc'
 
 declare global {
   interface Window {
-    electron: ElectronAPI
-    api: unknown
+    api: WidgetApi
   }
 }
