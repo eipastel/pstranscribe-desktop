@@ -1,0 +1,21 @@
+# PSCode ↔ GitHub Projects binding — written by `pscode init`.
+# The agent reads this during the guided flow to sync Issues and the board.
+repo: eipastel/pstranscribe-desktop
+owner: eipastel
+ownerType: user
+project: 9
+projectNodeId: PVT_kwHOBYRahc4BcwP7
+statusFieldId: PVTSSF_lAHOBYRahc4BcwP7zhXWuCA
+gh: gh
+issuePattern: issue
+links: {}
+statuses:
+  backlog: f75ad846
+  proposed: 5d20f87b
+  ready_to_dev: ee4c692d
+  in_progress: 47fc9ee4
+  review: fd6777bc
+  in_test: 5eab8af8
+  ready_to_deploy: cc601d34
+  done: "98236657"
+  cancelled: b773a5e2
