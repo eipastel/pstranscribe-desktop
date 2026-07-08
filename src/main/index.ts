@@ -17,6 +17,7 @@ app.whenReady().then(() => {
   registerIpcHandlers()
   createTray()
   const window = createWidgetWindow()
+  window.setOpacity(settings.opacity)
   startPushToTalk(window, settings.keybind)
 })
 

@@ -7,6 +7,12 @@ const WIDTH = 520
 const HEIGHT = 220
 const TOP_RATIO = 0.15 // posição estilo Spotlight: topo a ~15% da altura da tela
 
+let widgetWindow: BrowserWindow | null = null
+
+export function getWidgetWindow(): BrowserWindow | null {
+  return widgetWindow && !widgetWindow.isDestroyed() ? widgetWindow : null
+}
+
 export function createWidgetWindow(): BrowserWindow {
   const { workArea } = screen.getPrimaryDisplay()
   const x = workArea.x + Math.round((workArea.width - WIDTH) / 2)
@@ -53,5 +59,6 @@ export function createWidgetWindow(): BrowserWindow {
     window.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
+  widgetWindow = window
   return window
 }

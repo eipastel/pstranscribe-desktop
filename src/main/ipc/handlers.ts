@@ -21,6 +21,8 @@ import { clearApiKey, loadApiKey, maskedApiKey, storeApiKey, validateApiKey } fr
 import { processAudio } from '../openai/pipeline'
 import { pasteText } from '../paste'
 import { setPttKeybind } from '../ptt'
+import { app } from 'electron'
+import { getWidgetWindow } from '../windows/widget'
 
 function broadcastKeyChanged(): void {
   BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(KEY_CHANGED_CHANNEL))
@@ -46,6 +48,9 @@ export function registerIpcHandlers(): void {
     saveSettings({ ...loadSettings(), ...safePatch })
     console.log('settings:update', JSON.stringify(safePatch))
     if (safePatch.keybind) setPttKeybind(safePatch.keybind) // atalho troca ao vivo
+    if (safePatch.autoLaunch !== undefined)
+      app.setLoginItemSettings({ openAtLogin: safePatch.autoLaunch })
+    if (safePatch.opacity !== undefined) getWidgetWindow()?.setOpacity(safePatch.opacity)
     BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(SETTINGS_CHANGED_CHANNEL))
     return publicSettings()
   })

@@ -70,6 +70,33 @@ function SettingsWindow(): React.JSX.Element {
               />
             </div>
             <KeybindRow settings={settings} update={update} />
+            <div className="settings-row">
+              <div className="settings-row-text">
+                <div className="settings-row-label">Iniciar com o Windows</div>
+                <div className="settings-row-desc">Abre o widget junto com o sistema</div>
+              </div>
+              <Toggle
+                checked={settings.autoLaunch}
+                onChange={(v) => update({ autoLaunch: v })}
+                ariaLabel="Iniciar com o Windows"
+              />
+            </div>
+            <div className="settings-row">
+              <div className="settings-row-text">
+                <div className="settings-row-label">Opacidade do widget</div>
+                <div className="settings-row-desc">{Math.round(settings.opacity * 100)}%</div>
+              </div>
+              <input
+                type="range"
+                className="settings-slider"
+                min={50}
+                max={100}
+                step={5}
+                value={Math.round(settings.opacity * 100)}
+                aria-label="Opacidade do widget"
+                onChange={(e) => update({ opacity: Number(e.target.value) / 100 })}
+              />
+            </div>
             <KeyRow />
           </>
         )}

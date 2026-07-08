@@ -25,6 +25,6 @@ App configurável e distribuível: tray com menu, janela de configurações fiel
 - [x] Tela de settings fiel ao design: toggles Transcrever/Formatar ligados ao pipeline + IPC settings:update
 - [x] Gestão da chave na tela: mascarada sk-…últimos4, substituir e remover
 - [x] Keybind editável com captura na UI + PTT re-registrando ao vivo + keycap atualizado
-- [ ] Auto-launch com toggle + opacidade ajustável do widget
+- [x] Auto-launch com toggle + opacidade ajustável do widget
 - [ ] Onboarding de primeiro uso: chave → keybind → mini-tutorial na janela do widget
 - [ ] Empacotamento: ícone + instalador NSIS via build:win + smoke test do instalado

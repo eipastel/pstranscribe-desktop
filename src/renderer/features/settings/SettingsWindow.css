@@ -104,3 +104,10 @@
   color: var(--fg-sub);
   margin-top: 3px;
 }
+
+/* Slider nativo em grayscale */
+.settings-slider {
+  flex: none;
+  width: 140px;
+  accent-color: #fff;
+}
