@@ -49,3 +49,9 @@ export function clearApiKey(): void {
   delete settings.apiKeyEncrypted
   saveSettings(settings)
 }
+
+// Exibição segura: só os 4 últimos caracteres saem do main
+export function maskedApiKey(): string | null {
+  const key = loadApiKey()
+  return key ? `sk-…${key.slice(-4)}` : null
+}

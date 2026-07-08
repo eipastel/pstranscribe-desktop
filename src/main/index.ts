@@ -4,6 +4,7 @@ import { createWidgetWindow } from './windows/widget'
 import { registerIpcHandlers } from './ipc/handlers'
 import { loadSettings } from './settings'
 import { startPushToTalk } from './ptt'
+import { createTray } from './tray'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.eipastel.pstranscribe')
@@ -14,7 +15,9 @@ app.whenReady().then(() => {
 
   const settings = loadSettings()
   registerIpcHandlers()
+  createTray()
   const window = createWidgetWindow()
+  window.setOpacity(settings.opacity)
   startPushToTalk(window, settings.keybind)
 })
 

@@ -1,0 +1,24 @@
+.key-row-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.key-row-edit {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: stretch;
+}
+
+.key-row-edit .input-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.key-row-message {
+  font: var(--text-sub);
+  color: var(--fg-sub);
+  font-weight: 600;
+  margin-top: 6px;
+}
