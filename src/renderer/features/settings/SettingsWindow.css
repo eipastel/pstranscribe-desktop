@@ -72,3 +72,35 @@
   padding: 6px 26px 18px;
   position: relative;
 }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 19px 0;
+}
+
+.settings-row + .settings-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.settings-row.dim {
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.settings-row-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-row-label {
+  font: var(--text-label);
+  letter-spacing: 0.1px;
+}
+
+.settings-row-desc {
+  font: 400 12px/1.45 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 3px;
+}

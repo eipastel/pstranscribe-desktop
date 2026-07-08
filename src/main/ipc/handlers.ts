@@ -8,12 +8,21 @@ import {
   PROCESS_AUDIO_CHANNEL,
   PROCESS_RAW_CHANNEL,
   SET_IGNORE_MOUSE_CHANNEL,
-  type ProcessResult
+  UPDATE_SETTINGS_CHANNEL,
+  type ProcessResult,
+  type PublicSettings,
+  type SettingsPatch
 } from '../../shared/ipc'
-import { loadSettings } from '../settings'
+import { loadSettings, saveSettings } from '../settings'
 import { clearApiKey, loadApiKey, storeApiKey, validateApiKey } from '../openai/key'
 import { processAudio } from '../openai/pipeline'
 import { pasteText } from '../paste'
+
+function publicSettings(): PublicSettings {
+  const settings = { ...loadSettings() }
+  delete settings.apiKeyEncrypted
+  return settings
+}
 
 export function registerIpcHandlers(): void {
   ipcMain.handle(PING_CHANNEL, () => {
@@ -21,7 +30,15 @@ export function registerIpcHandlers(): void {
     return 'pong'
   })
 
-  ipcMain.handle(GET_SETTINGS_CHANNEL, () => loadSettings())
+  ipcMain.handle(GET_SETTINGS_CHANNEL, (): PublicSettings => publicSettings())
+
+  ipcMain.handle(UPDATE_SETTINGS_CHANNEL, (_event, patch: SettingsPatch): PublicSettings => {
+    const safePatch = { ...patch }
+    delete (safePatch as Record<string, unknown>).apiKeyEncrypted // nunca via este canal
+    saveSettings({ ...loadSettings(), ...safePatch })
+    console.log('settings:update', JSON.stringify(safePatch))
+    return publicSettings()
+  })
 
   ipcMain.handle(KEY_SET_CHANNEL, async (_event, key: string) => {
     const result = await validateApiKey(key)
