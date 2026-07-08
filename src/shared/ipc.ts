@@ -1,6 +1,6 @@
 import type { Settings } from './settings'
 import type { HistoryStats, TranscriptionRecord } from './history'
-import type { ReviewAction } from './glossary'
+import type { ReviewAction, SavedConcepts } from './glossary'
 
 export const PING_CHANNEL = 'ping'
 export const SET_IGNORE_MOUSE_CHANNEL = 'set-ignore-mouse-events'
@@ -43,6 +43,9 @@ export const CONCEPTS_LIST_CHANNEL = 'concepts:list'
 export const CONCEPTS_REVIEW_CHANNEL = 'concepts:review'
 export const CONCEPTS_CHANGED_CHANNEL = 'concepts:changed'
 export const CONCEPTS_OPEN_CHANNEL = 'concepts:open'
+export const CONCEPTS_SAVED_CHANNEL = 'concepts:saved'
+export const CONCEPTS_SET_CHANNEL = 'concepts:set'
+export const CONCEPTS_REMOVE_CHANNEL = 'concepts:remove'
 
 export interface HistoryPayload {
   /** registros mais recentes primeiro */
@@ -88,4 +91,7 @@ export interface WidgetApi {
   reviewConcept(term: string, action: ReviewAction, spelling?: string): Promise<void>
   onConceptsChanged(callback: () => void): () => void
   openConcepts(): void
+  getSavedConcepts(): Promise<SavedConcepts>
+  setCorrection(wrong: string, right: string): Promise<void>
+  removeConcept(term: string): Promise<void>
 }

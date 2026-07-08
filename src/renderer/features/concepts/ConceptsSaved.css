@@ -1,0 +1,148 @@
+/* Painel de conteúdo dentro do shell (o vidro é do .app-shell) */
+.cs-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.cs-head {
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cs-title {
+  font: 600 17px/1.3 var(--font-stack);
+  letter-spacing: 0.1px;
+}
+
+.cs-sub {
+  font: 400 12.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 3px;
+}
+
+.cs-body {
+  padding: 18px 26px 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.cs-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.cs-section-label {
+  font: 600 11px/1.3 var(--font-stack);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--fg-sub);
+  margin: 16px 0 6px;
+}
+
+.cs-empty {
+  padding: 14px 0;
+  color: var(--fg-sub);
+  font: 400 13px/1.4 var(--font-stack);
+}
+
+.cs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cs-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 2px;
+}
+
+.cs-item + .cs-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cs-term {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font: 500 13px/1.3 var(--font-stack);
+}
+
+.cs-wrong {
+  color: var(--fg-sub);
+  text-decoration: line-through;
+}
+
+.cs-arrow {
+  color: var(--fg-sub);
+  flex: none;
+}
+
+.cs-actions {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+
+.cs-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.cs-input {
+  min-width: 0;
+  width: 120px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: inherit;
+  font: 400 12.5px/1.2 var(--font-stack);
+  outline: none;
+}
+
+.cs-input:focus {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.cs-btn {
+  padding: 6px 11px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: inherit;
+  font: 500 12px/1.2 var(--font-stack);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cs-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cs-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.cs-primary {
+  background: rgba(120, 170, 255, 0.22);
+  border-color: rgba(120, 170, 255, 0.35);
+}
+
+.cs-primary:hover {
+  background: rgba(120, 170, 255, 0.3);
+}
+
+.cs-muted {
+  color: var(--fg-sub);
+}

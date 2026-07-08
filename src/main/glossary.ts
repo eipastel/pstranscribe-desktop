@@ -5,7 +5,8 @@ import {
   applyCorrections,
   emptyGlossary,
   type Glossary,
-  type ReviewAction
+  type ReviewAction,
+  type SavedConcepts
 } from '../shared/glossary'
 
 // Glossário local em JSON no userData, espelhando history.ts.
@@ -51,13 +52,43 @@ export function addPending(terms: string[]): number {
   return fresh.length
 }
 
-// Revisão de um termo pendente: tira da fila, marca como revisado e, se for
-// correção, grava a grafia certa no map.
+// Revisão de um termo pendente: tira da fila, marca como revisado e, conforme a
+// ação, grava a grafia certa (correct) ou registra como mantido (keep).
 export function reviewConcept(term: string, action: ReviewAction, spelling?: string): Glossary {
   const g = loadGlossary()
   g.pending = g.pending.filter((t) => t !== term)
   if (!g.reviewed.includes(term)) g.reviewed.push(term)
   if (action === 'correct' && spelling?.trim()) g.corrections[term] = spelling.trim()
+  if (action === 'keep' && !g.kept.includes(term)) g.kept.push(term)
   saveGlossary(g)
   return g
+}
+
+// Conceitos salvos para a tela de revisão manual (correções + mantidos).
+export function savedConcepts(): SavedConcepts {
+  const g = loadGlossary()
+  return { corrections: g.corrections, kept: g.kept }
+}
+
+// Grava/edita uma correção errado→certo. Cobre "adicionar do zero" e "editar
+// grafia" — são o mesmo set. Se o termo estava só como mantido, deixa de ser.
+export function setCorrection(wrong: string, right: string): SavedConcepts {
+  const g = loadGlossary()
+  const w = wrong.trim()
+  const r = right.trim()
+  if (w && r) {
+    g.corrections[w] = r
+    g.kept = g.kept.filter((t) => t !== w)
+    saveGlossary(g)
+  }
+  return { corrections: g.corrections, kept: g.kept }
+}
+
+// Remove um conceito salvo, seja correção ou mantido.
+export function removeConcept(term: string): SavedConcepts {
+  const g = loadGlossary()
+  delete g.corrections[term]
+  g.kept = g.kept.filter((t) => t !== term)
+  saveGlossary(g)
+  return { corrections: g.corrections, kept: g.kept }
 }

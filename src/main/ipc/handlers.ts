@@ -18,6 +18,9 @@ import {
   CONCEPTS_REVIEW_CHANNEL,
   CONCEPTS_CHANGED_CHANNEL,
   CONCEPTS_OPEN_CHANNEL,
+  CONCEPTS_SAVED_CHANNEL,
+  CONCEPTS_SET_CHANNEL,
+  CONCEPTS_REMOVE_CHANNEL,
   REALTIME_START_CHANNEL,
   REALTIME_AUDIO_CHANNEL,
   REALTIME_STOP_CHANNEL,
@@ -38,9 +41,15 @@ import { extractConcepts } from '../openai/concepts'
 import { addPending } from '../glossary'
 import { computeCost } from '../openai/pricing'
 import { appendRecord, loadHistory } from '../history'
-import { loadGlossary, reviewConcept } from '../glossary'
+import {
+  loadGlossary,
+  reviewConcept,
+  savedConcepts,
+  setCorrection,
+  removeConcept
+} from '../glossary'
 import { computeStats } from '../../shared/history'
-import { pasteText, enqueuePaste, flushPasteQueue } from '../paste'
+import { pasteText, enqueuePaste, flushPasteQueue, warmPaste } from '../paste'
 import { setPttKeybind } from '../ptt'
 import { app } from 'electron'
 import { getWidgetWindow } from '../windows/widget'
@@ -165,9 +174,22 @@ export function registerIpcHandlers(): void {
 
   ipcMain.on(CONCEPTS_OPEN_CHANNEL, () => openConceptsWindow())
 
+  ipcMain.handle(CONCEPTS_SAVED_CHANNEL, () => savedConcepts())
+
+  ipcMain.handle(CONCEPTS_SET_CHANNEL, (_event, wrong: string, right: string) => {
+    setCorrection(wrong, right)
+    broadcastConceptsChanged()
+  })
+
+  ipcMain.handle(CONCEPTS_REMOVE_CHANNEL, (_event, term: string) => {
+    removeConcept(term)
+    broadcastConceptsChanged()
+  })
+
   // Abre a sessão realtime; cada delta é colado no cursor e ecoado ao renderer.
   ipcMain.handle(REALTIME_START_CHANNEL, async (event): Promise<RealtimeStartResult> => {
     if (realtimeSession) await realtimeSession.close() // encerra sessão órfã antes de abrir outra
+    warmPaste() // aquece o powershell.exe enquanto a sessão abre
     const sender = event.sender
     const opened = await openRealtimeTranscription({
       onDelta: (text) => {

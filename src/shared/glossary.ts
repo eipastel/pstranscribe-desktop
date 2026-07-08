@@ -12,9 +12,23 @@ export interface Glossary {
   pending: string[]
   /** termos já revisados (aprovado/corrigido/ignorado) — não voltam a ser sugeridos */
   reviewed: string[]
+  /** termos marcados como "é isso" (mantidos), sem troca de grafia */
+  kept: string[]
 }
 
-export const emptyGlossary = (): Glossary => ({ corrections: {}, pending: [], reviewed: [] })
+export const emptyGlossary = (): Glossary => ({
+  corrections: {},
+  pending: [],
+  reviewed: [],
+  kept: []
+})
+
+// Conceitos salvos, para a tela de revisão manual: correções (errado→certo) e
+// mantidos (sem troca de grafia). Não inclui pendentes nem ignorados.
+export interface SavedConcepts {
+  corrections: Record<string, string>
+  kept: string[]
+}
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

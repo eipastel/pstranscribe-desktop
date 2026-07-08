@@ -20,6 +20,9 @@ import {
   CONCEPTS_REVIEW_CHANNEL,
   CONCEPTS_CHANGED_CHANNEL,
   CONCEPTS_OPEN_CHANNEL,
+  CONCEPTS_SAVED_CHANNEL,
+  CONCEPTS_SET_CHANNEL,
+  CONCEPTS_REMOVE_CHANNEL,
   REALTIME_START_CHANNEL,
   REALTIME_AUDIO_CHANNEL,
   REALTIME_STOP_CHANNEL,
@@ -57,6 +60,9 @@ const api: WidgetApi = {
     ipcRenderer.invoke(CONCEPTS_REVIEW_CHANNEL, term, action, spelling),
   onConceptsChanged: (callback) => subscribe(CONCEPTS_CHANGED_CHANNEL, callback),
   openConcepts: () => ipcRenderer.send(CONCEPTS_OPEN_CHANNEL),
+  getSavedConcepts: () => ipcRenderer.invoke(CONCEPTS_SAVED_CHANNEL),
+  setCorrection: (wrong, right) => ipcRenderer.invoke(CONCEPTS_SET_CHANNEL, wrong, right),
+  removeConcept: (term) => ipcRenderer.invoke(CONCEPTS_REMOVE_CHANNEL, term),
   onRawText: (callback) => {
     const listener = (_e: Electron.IpcRendererEvent, raw: string): void => callback(raw)
     ipcRenderer.on(PROCESS_RAW_CHANNEL, listener)
