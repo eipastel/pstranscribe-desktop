@@ -1,7 +1,9 @@
 import { BrowserWindow, ipcMain } from 'electron'
 import {
   GET_SETTINGS_CHANNEL,
+  KEY_CHANGED_CHANNEL,
   KEY_CLEAR_CHANNEL,
+  KEY_MASKED_CHANNEL,
   KEY_SET_CHANNEL,
   KEY_STATUS_CHANNEL,
   PING_CHANNEL,
@@ -14,9 +16,13 @@ import {
   type SettingsPatch
 } from '../../shared/ipc'
 import { loadSettings, saveSettings } from '../settings'
-import { clearApiKey, loadApiKey, storeApiKey, validateApiKey } from '../openai/key'
+import { clearApiKey, loadApiKey, maskedApiKey, storeApiKey, validateApiKey } from '../openai/key'
 import { processAudio } from '../openai/pipeline'
 import { pasteText } from '../paste'
+
+function broadcastKeyChanged(): void {
+  BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(KEY_CHANGED_CHANNEL))
+}
 
 function publicSettings(): PublicSettings {
   const settings = { ...loadSettings() }
@@ -43,13 +49,21 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(KEY_SET_CHANNEL, async (_event, key: string) => {
     const result = await validateApiKey(key)
     console.log('key:set →', JSON.stringify(result)) // nunca loga a chave
-    if (result.ok) storeApiKey(key)
+    if (result.ok) {
+      storeApiKey(key)
+      broadcastKeyChanged()
+    }
     return result
   })
 
   ipcMain.handle(KEY_STATUS_CHANNEL, () => loadApiKey() !== null)
 
-  ipcMain.handle(KEY_CLEAR_CHANNEL, () => clearApiKey())
+  ipcMain.handle(KEY_CLEAR_CHANNEL, () => {
+    clearApiKey()
+    broadcastKeyChanged()
+  })
+
+  ipcMain.handle(KEY_MASKED_CHANNEL, () => maskedApiKey())
 
   ipcMain.handle(
     PROCESS_AUDIO_CHANNEL,

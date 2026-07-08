@@ -14,6 +14,8 @@ export const PTT_RELEASE_CHANNEL = 'ptt:release'
 export const KEY_SET_CHANNEL = 'key:set'
 export const KEY_STATUS_CHANNEL = 'key:status'
 export const KEY_CLEAR_CHANNEL = 'key:clear'
+export const KEY_MASKED_CHANNEL = 'key:masked'
+export const KEY_CHANGED_CHANNEL = 'key:changed'
 
 export type KeyErrorCode = 'invalid' | 'rate_limit' | 'no_credit' | 'network'
 
@@ -43,6 +45,8 @@ export interface WidgetApi {
   setApiKey(key: string): Promise<KeySetResult>
   hasApiKey(): Promise<boolean>
   clearApiKey(): Promise<void>
+  getMaskedApiKey(): Promise<string | null>
+  onKeyChanged(callback: () => void): () => void
   processAudio(audio: ArrayBuffer): Promise<ProcessResult>
   onRawText(callback: (raw: string) => void): () => void
 }

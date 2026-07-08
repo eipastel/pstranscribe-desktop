@@ -11,7 +11,10 @@ function App(): React.JSX.Element | null {
   const setHasKey = useWidgetStore((s) => s.setHasKey)
 
   useEffect(() => {
-    if (!isSettingsView) void window.api.hasApiKey().then(setHasKey)
+    if (isSettingsView) return
+    void window.api.hasApiKey().then(setHasKey)
+    // chave adicionada/removida pela tela de settings reflete aqui na hora
+    return window.api.onKeyChanged(() => void window.api.hasApiKey().then(setHasKey))
   }, [setHasKey])
 
   if (isSettingsView) return <SettingsWindow />
