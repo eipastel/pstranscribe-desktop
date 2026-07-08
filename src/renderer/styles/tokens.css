@@ -17,7 +17,7 @@
   --fg-kbd: rgba(255, 255, 255, 0.62);
 
   /* Vidro (glass) */
-  --glass-bg: rgba(30, 30, 33, 0.62);
+  --glass-bg: rgb(30, 30, 33);
   --glass-blur: blur(34px) saturate(1.3);
   --glass-border: rgba(255, 255, 255, 0.14);
   --glass-border-hover: rgba(255, 255, 255, 0.22);
