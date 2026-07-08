@@ -21,6 +21,9 @@ export interface Settings {
   onboarded: boolean
 }
 
+// ponytail: bloqueio temporário da formatação — trocar para false devolve a opção.
+export const FORMAT_LOCKED = true
+
 export const DEFAULT_SETTINGS: Settings = {
   keybind: { ctrl: true, alt: false, shift: false, key: 'P' },
   transcrever: true,

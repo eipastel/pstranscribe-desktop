@@ -4,6 +4,7 @@ import Toggle from '@/components/Toggle/Toggle'
 import KeyRow from './KeyRow'
 import KeybindRow from './KeybindRow'
 import { useSettings } from './useSettings'
+import { FORMAT_LOCKED } from '@shared/settings'
 
 // Painel de configurações fiel a VoiceSettings.dc.html
 function SettingsWindow(): React.JSX.Element {
@@ -55,7 +56,7 @@ function SettingsWindow(): React.JSX.Element {
                 ariaLabel="Transcrever"
               />
             </div>
-            <div className={settings.transcrever ? 'settings-row' : 'settings-row dim'}>
+            <div className={settings.transcrever && !FORMAT_LOCKED ? 'settings-row' : 'settings-row dim'}>
               <div className="settings-row-text">
                 <div className="settings-row-label">Formatar</div>
                 <div className="settings-row-desc">
@@ -63,9 +64,9 @@ function SettingsWindow(): React.JSX.Element {
                 </div>
               </div>
               <Toggle
-                checked={settings.transcrever && settings.formatar}
+                checked={settings.transcrever && settings.formatar && !FORMAT_LOCKED}
                 onChange={(v) => update({ formatar: v })}
-                disabled={!settings.transcrever}
+                disabled={!settings.transcrever || FORMAT_LOCKED}
                 ariaLabel="Formatar"
               />
             </div>

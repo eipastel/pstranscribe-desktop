@@ -1,4 +1,5 @@
 import { loadSettings } from '../settings'
+import { FORMAT_LOCKED } from '../../shared/settings'
 import { transcribeAudio } from './stt'
 import { formatText } from './format'
 import type { ProcessError } from '../../shared/ipc'
@@ -20,7 +21,7 @@ export async function processAudio(
 
   const raw = stt.text.trim()
   onRaw?.(raw)
-  if (!formatar || !raw) return { ok: true, raw, text: raw, formatted: false }
+  if (!formatar || FORMAT_LOCKED || !raw) return { ok: true, raw, text: raw, formatted: false }
 
   const formatted = await formatText(raw)
   return { ok: true, raw, text: formatted ?? raw, formatted: formatted !== null }
