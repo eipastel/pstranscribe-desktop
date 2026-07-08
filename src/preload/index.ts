@@ -8,6 +8,7 @@ import {
   PTT_PRESS_CHANNEL,
   PTT_RELEASE_CHANNEL,
   PROCESS_AUDIO_CHANNEL,
+  PROCESS_RAW_CHANNEL,
   SET_IGNORE_MOUSE_CHANNEL,
   type WidgetApi
 } from '../shared/ipc'
@@ -28,7 +29,12 @@ const api: WidgetApi = {
   setApiKey: (key) => ipcRenderer.invoke(KEY_SET_CHANNEL, key),
   hasApiKey: () => ipcRenderer.invoke(KEY_STATUS_CHANNEL),
   clearApiKey: () => ipcRenderer.invoke(KEY_CLEAR_CHANNEL),
-  processAudio: (audio) => ipcRenderer.invoke(PROCESS_AUDIO_CHANNEL, audio)
+  processAudio: (audio) => ipcRenderer.invoke(PROCESS_AUDIO_CHANNEL, audio),
+  onRawText: (callback) => {
+    const listener = (_e: Electron.IpcRendererEvent, raw: string): void => callback(raw)
+    ipcRenderer.on(PROCESS_RAW_CHANNEL, listener)
+    return () => ipcRenderer.removeListener(PROCESS_RAW_CHANNEL, listener)
+  }
 }
 
 contextBridge.exposeInMainWorld('api', api)

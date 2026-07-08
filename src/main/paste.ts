@@ -8,9 +8,10 @@ export async function pasteText(text: string): Promise<boolean> {
   const previous = clipboard.readText()
   clipboard.writeText(text)
   const sent = await sendCtrlV()
+  if (!sent) return false // falhou: deixa o texto no clipboard para o usuário colar manual
   await sleep(300) // dá tempo do alvo ler o clipboard antes de restaurar
   clipboard.writeText(previous) // ponytail: restaura só texto; imagem/arquivo no clipboard se perde
-  return sent
+  return true
 }
 
 // ponytail: spawn de PowerShell (~0.5s) em vez de dep nativa (nut.js virou paga);

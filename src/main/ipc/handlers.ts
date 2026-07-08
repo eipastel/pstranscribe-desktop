@@ -6,11 +6,14 @@ import {
   KEY_STATUS_CHANNEL,
   PING_CHANNEL,
   PROCESS_AUDIO_CHANNEL,
-  SET_IGNORE_MOUSE_CHANNEL
+  PROCESS_RAW_CHANNEL,
+  SET_IGNORE_MOUSE_CHANNEL,
+  type ProcessResult
 } from '../../shared/ipc'
 import { loadSettings } from '../settings'
 import { clearApiKey, loadApiKey, storeApiKey, validateApiKey } from '../openai/key'
 import { processAudio } from '../openai/pipeline'
+import { pasteText } from '../paste'
 
 export function registerIpcHandlers(): void {
   ipcMain.handle(PING_CHANNEL, () => {
@@ -31,16 +34,24 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(KEY_CLEAR_CHANNEL, () => clearApiKey())
 
-  ipcMain.handle(PROCESS_AUDIO_CHANNEL, async (_event, audio: ArrayBuffer) => {
-    const result = await processAudio(Buffer.from(audio))
-    console.log(
-      'pipeline:',
-      result.ok
-        ? `bruto="${result.raw.slice(0, 60)}" final="${result.text.slice(0, 60)}" formatted=${result.formatted}`
-        : `erro ${result.error}`
-    )
-    return result
-  })
+  ipcMain.handle(
+    PROCESS_AUDIO_CHANNEL,
+    async (event, audio: ArrayBuffer): Promise<ProcessResult> => {
+      const result = await processAudio(Buffer.from(audio), (raw) =>
+        event.sender.send(PROCESS_RAW_CHANNEL, raw)
+      )
+      if (!result.ok) {
+        console.log('pipeline: erro', result.error)
+        return result
+      }
+      const pasted = result.text ? await pasteText(result.text) : false
+      console.log(
+        'pipeline:',
+        `bruto="${result.raw.slice(0, 60)}" final="${result.text.slice(0, 60)}" formatted=${result.formatted} pasted=${pasted}`
+      )
+      return { ...result, pasted }
+    }
+  )
 
   // Hover na pílula desliga o ignore para receber cliques; fora dela, tudo atravessa
   ipcMain.on(SET_IGNORE_MOUSE_CHANNEL, (event, ignore: boolean) => {
