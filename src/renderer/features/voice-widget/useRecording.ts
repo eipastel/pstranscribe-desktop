@@ -6,6 +6,7 @@ import { startRecording, stopRecording } from './recorder'
 export function useRecording(): void {
   useEffect(() => {
     const offPress = window.api.onPttPress(() => {
+      if (useWidgetStore.getState().hasKey !== true) return // sem chave válida, não grava
       useWidgetStore.getState().press()
       void startRecording()
         .then((stream) => useWidgetStore.getState().setMicStream(stream))

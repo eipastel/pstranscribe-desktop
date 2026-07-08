@@ -22,7 +22,7 @@ O produto funcionando ponta a ponta com a chave do próprio usuário: insere a c
 
 ## Subtasks
 - [x] Chave segura no main: safeStorage + settings, IPC key:set/key:status/key:clear, validação /v1/models com erros 401/429/402 mapeados
-- [ ] Porta de primeiro uso no widget: painel glass com Input + Salvar, estados checking/ok/error, PTT travado sem chave
+- [x] Porta de primeiro uso no widget: painel glass com Input + Salvar, estados checking/ok/error, PTT travado sem chave
 - [ ] Pipeline STT no main: blob via IPC no release → gpt-4o-transcribe (language pt) → transcrição bruta
 - [ ] Formatação por IA com flags transcrever/formatar; falha → cola o bruto
 - [ ] Colar no campo em foco: clipboard + Ctrl+V simulado + restauração

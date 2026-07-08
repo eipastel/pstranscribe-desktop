@@ -10,8 +10,11 @@ interface WidgetState {
   elapsed: number
   audioBlob: Blob | null
   micStream: MediaStream | null
+  /** null = ainda não sabemos; false trava o PTT e mostra a porta da chave */
+  hasKey: boolean | null
   setAudioBlob: (blob: Blob | null) => void
   setMicStream: (stream: MediaStream | null) => void
+  setHasKey: (hasKey: boolean) => void
   press: () => void
   release: () => void
 }
@@ -24,8 +27,10 @@ export const useWidgetStore = create<WidgetState>((set, get) => ({
   elapsed: 0,
   audioBlob: null,
   micStream: null,
+  hasKey: null,
   setAudioBlob: (blob) => set({ audioBlob: blob }),
   setMicStream: (stream) => set({ micStream: stream }),
+  setHasKey: (hasKey) => set({ hasKey }),
   // Hold-to-talk: press começa a ouvir; release dispara o refino (mock até a batch 4)
   press: () => {
     const { status } = get()
