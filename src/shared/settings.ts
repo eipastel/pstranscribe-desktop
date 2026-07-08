@@ -7,6 +7,8 @@ export interface Keybind {
 
 export interface Settings {
   keybind: Keybind
+  /** Chave OpenAI criptografada com safeStorage, em base64 — nunca em texto puro */
+  apiKeyEncrypted?: string
 }
 
 export const DEFAULT_SETTINGS: Settings = {
