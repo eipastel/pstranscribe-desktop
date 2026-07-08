@@ -11,9 +11,11 @@ export function openSettingsWindow(): void {
     return
   }
 
+  // 520 de largura acompanha o widget (folga simétrica pro shadow do vidro);
+  // 660 de altura cabe o painel inteiro (460px de largura) sem cortar o último row.
   settingsWindow = new BrowserWindow({
-    width: 500,
-    height: 560,
+    width: 520,
+    height: 660,
     show: false,
     transparent: true,
     frame: false,

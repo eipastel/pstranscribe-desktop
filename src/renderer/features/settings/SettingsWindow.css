@@ -1,6 +1,6 @@
-/* Painel do design VoiceSettings: 452px, glass mais fundo que a pílula */
+/* Painel do design VoiceSettings: largura da pílula, glass mais fundo que a pílula */
 .settings-panel {
-  width: 452px;
+  width: var(--pill-width);
   border-radius: 20px;
   overflow: hidden;
   background: rgba(26, 26, 29, 0.62);
