@@ -16,6 +16,10 @@ export interface KeySetResult {
   error?: KeyErrorCode
 }
 
+export const TRANSCRIBE_CHANNEL = 'audio:transcribe'
+
+export type TranscribeResult = { ok: true; text: string } | { ok: false; error: KeyErrorCode }
+
 export interface WidgetApi {
   ping(): Promise<string>
   setIgnoreMouseEvents(ignore: boolean): void
@@ -25,4 +29,5 @@ export interface WidgetApi {
   setApiKey(key: string): Promise<KeySetResult>
   hasApiKey(): Promise<boolean>
   clearApiKey(): Promise<void>
+  transcribe(audio: ArrayBuffer): Promise<TranscribeResult>
 }

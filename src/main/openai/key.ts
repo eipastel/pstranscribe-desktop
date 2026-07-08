@@ -22,7 +22,7 @@ export async function validateApiKey(key: string): Promise<KeySetResult> {
   }
 }
 
-function mapError(status: number, code?: string): KeyErrorCode {
+export function mapError(status: number, code?: string): KeyErrorCode {
   if (status === 401) return 'invalid'
   if (code === 'insufficient_quota' || status === 402) return 'no_credit'
   if (status === 429) return 'rate_limit'

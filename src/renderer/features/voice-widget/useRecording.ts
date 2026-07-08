@@ -15,10 +15,12 @@ export function useRecording(): void {
     const offRelease = window.api.onPttRelease(() => {
       useWidgetStore.getState().release()
       useWidgetStore.getState().setMicStream(null)
-      void stopRecording().then((blob) => {
+      void stopRecording().then(async (blob) => {
         if (!blob) return
         useWidgetStore.getState().setAudioBlob(blob)
         console.log(`audio blob pronto: ${blob.size} bytes (${blob.type})`)
+        const result = await window.api.transcribe(await blob.arrayBuffer())
+        console.log(result.ok ? `transcrição bruta: ${result.text}` : `stt erro: ${result.error}`)
       })
     })
     return () => {

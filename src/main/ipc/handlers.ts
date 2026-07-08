@@ -5,10 +5,12 @@ import {
   KEY_SET_CHANNEL,
   KEY_STATUS_CHANNEL,
   PING_CHANNEL,
-  SET_IGNORE_MOUSE_CHANNEL
+  SET_IGNORE_MOUSE_CHANNEL,
+  TRANSCRIBE_CHANNEL
 } from '../../shared/ipc'
 import { loadSettings } from '../settings'
 import { clearApiKey, loadApiKey, storeApiKey, validateApiKey } from '../openai/key'
+import { transcribeAudio } from '../openai/stt'
 
 export function registerIpcHandlers(): void {
   ipcMain.handle(PING_CHANNEL, () => {
@@ -28,6 +30,17 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(KEY_STATUS_CHANNEL, () => loadApiKey() !== null)
 
   ipcMain.handle(KEY_CLEAR_CHANNEL, () => clearApiKey())
+
+  ipcMain.handle(TRANSCRIBE_CHANNEL, async (_event, audio: ArrayBuffer) => {
+    const result = await transcribeAudio(Buffer.from(audio))
+    console.log(
+      'stt:',
+      result.ok
+        ? `"${result.text.slice(0, 80)}" (${result.text.length} chars)`
+        : `erro ${result.error}`
+    )
+    return result
+  })
 
   // Hover na pílula desliga o ignore para receber cliques; fora dela, tudo atravessa
   ipcMain.on(SET_IGNORE_MOUSE_CHANNEL, (event, ignore: boolean) => {

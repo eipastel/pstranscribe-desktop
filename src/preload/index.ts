@@ -8,6 +8,7 @@ import {
   PTT_PRESS_CHANNEL,
   PTT_RELEASE_CHANNEL,
   SET_IGNORE_MOUSE_CHANNEL,
+  TRANSCRIBE_CHANNEL,
   type WidgetApi
 } from '../shared/ipc'
 
@@ -26,7 +27,8 @@ const api: WidgetApi = {
   onPttRelease: (callback) => subscribe(PTT_RELEASE_CHANNEL, callback),
   setApiKey: (key) => ipcRenderer.invoke(KEY_SET_CHANNEL, key),
   hasApiKey: () => ipcRenderer.invoke(KEY_STATUS_CHANNEL),
-  clearApiKey: () => ipcRenderer.invoke(KEY_CLEAR_CHANNEL)
+  clearApiKey: () => ipcRenderer.invoke(KEY_CLEAR_CHANNEL),
+  transcribe: (audio) => ipcRenderer.invoke(TRANSCRIBE_CHANNEL, audio)
 }
 
 contextBridge.exposeInMainWorld('api', api)
