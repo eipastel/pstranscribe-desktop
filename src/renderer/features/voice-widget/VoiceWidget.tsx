@@ -6,21 +6,28 @@ import StatusLabel from '@/components/StatusLabel/StatusLabel'
 import Timer from '@/components/Timer/Timer'
 import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
 import CheckIcon from '@/components/CheckIcon/CheckIcon'
-import { useWidgetStore, type WidgetStatus } from '@/state/widget'
+import StatusDot from '@/components/StatusDot/StatusDot'
+import { useWidgetStore, type WidgetStatus, type WidgetError } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
 import { useRecording } from './useRecording'
 import { useMicLevels } from './useMicLevels'
 import { keybindParts } from '@shared/settings'
 
-// Texto mock do design (VoiceWidget.dc.html); a transcrição real vem em batch futura
-const RAW_TEXT =
-  'então tipo assim ó eu queria ah marcar tipo uma reunião sabe com o pessoal de vendas pra semana que vem talvez quinta e ah acho que umas três da tarde'
-
 const HINTS: Record<WidgetStatus, string> = {
   idle: 'Segure o atalho para falar',
   listening: 'Solte para transcrever',
   transcribing: 'A IA está enxugando o texto…',
-  done: 'Texto tratado colado onde o cursor estava'
+  done: 'Texto tratado colado onde o cursor estava',
+  error: 'Segure o atalho para tentar de novo'
+}
+
+const ERRORS: Record<WidgetError, { title: string; hint: string }> = {
+  invalid: { title: 'Chave inválida', hint: 'Confira sua chave em platform.openai.com' },
+  rate_limit: { title: 'A OpenAI pediu uma pausa', hint: 'Espere um instante e fale de novo' },
+  no_credit: { title: 'Conta sem crédito', hint: 'Ative o billing na OpenAI' },
+  network: { title: 'Sem conexão', hint: 'Verifique a internet e tente de novo' },
+  disabled: { title: 'Transcrição desligada', hint: 'Ative nas configurações' },
+  paste_failed: { title: 'Não consegui colar', hint: 'O texto está no clipboard — use Ctrl+V' }
 }
 
 // Usa a classe .icon-chip do CheckIcon (importado acima), mesmo chip circular do design
@@ -47,9 +54,12 @@ function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
   const micStream = useWidgetStore((s) => s.micStream)
+  const rawText = useWidgetStore((s) => s.rawText)
+  const errorCode = useWidgetStore((s) => s.errorCode)
   const hoverHandlers = useClickThrough()
   useRecording()
   const levels = useMicLevels(micStream)
+  const error = ERRORS[errorCode ?? 'network']
 
   const [keyParts, setKeyParts] = useState<string[]>([])
   useEffect(() => {
@@ -90,7 +100,7 @@ function VoiceWidget(): React.JSX.Element {
                 <span className="vw-title">Refinando com IA</span>
                 <span className="vw-aux">transcrição bruta</span>
               </div>
-              <TranscriptPreview text={RAW_TEXT} />
+              <TranscriptPreview text={rawText ?? 'Transcrevendo…'} />
             </div>
           )}
           {status === 'done' && (
@@ -100,6 +110,12 @@ function VoiceWidget(): React.JSX.Element {
                 title="Colado no cursor"
                 subtitle="Segure o atalho para gravar de novo"
               />
+            </div>
+          )}
+          {status === 'error' && (
+            <div className="vw-row">
+              <StatusDot status="error" />
+              <StatusLabel title={error.title} subtitle={error.hint} />
             </div>
           )}
         </Pill>
