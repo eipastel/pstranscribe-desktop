@@ -30,26 +30,6 @@ const ERRORS: Record<WidgetError, { title: string; hint: string }> = {
   paste_failed: { title: 'Não consegui colar', hint: 'O texto está no clipboard — use Ctrl+V' }
 }
 
-// Usa a classe .icon-chip do CheckIcon (importado acima), mesmo chip circular do design
-function MicIcon(): React.JSX.Element {
-  return (
-    <span className="icon-chip" aria-hidden="true">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x={9} y={3} width={6} height={11} rx={3} />
-        <path d="M5 11a7 7 0 0 0 14 0" />
-        <line x1={12} y1={18} x2={12} y2={21} />
-      </svg>
-    </span>
-  )
-}
-
 function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
@@ -70,61 +50,60 @@ function VoiceWidget(): React.JSX.Element {
     return window.api.onSettingsChanged(load) // keycap acompanha o atalho ao vivo
   }, [])
 
+  // Em repouso: só uma marca d'água discreta no canto; a pílula surge sob demanda.
+  if (status === 'idle') {
+    return (
+      <div className="voice-widget">
+        <div className="vw-watermark">
+          Segure {keyParts.length ? keyParts.join(' + ') : 'o atalho'} para falar
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="voice-widget">
-      <div {...hoverHandlers}>
-        <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]}>
-          {status === 'idle' && (
-            <div className="vw-row">
-              <MicIcon />
-              <StatusLabel
-                title="Falar para transcrever"
-                subtitle="A IA deixa sua mensagem enxuta"
-              />
-              <span className="vw-kbd">
-                {keyParts.map((part) => (
-                  <span key={part}>{part}</span>
-                ))}
-              </span>
-            </div>
-          )}
-          {status === 'listening' && (
-            <div className="vw-row">
-              <span className="vw-dot" aria-hidden="true" />
-              <div className="vw-wave">
-                <Waveform levels={levels} />
+      <div className="vw-pill">
+        <div {...hoverHandlers}>
+          <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]}>
+            {status === 'listening' && (
+              <div className="vw-row">
+                <span className="vw-dot" aria-hidden="true" />
+                <div className="vw-wave">
+                  <Waveform levels={levels} />
+                </div>
+                <Timer seconds={elapsed} />
               </div>
-              <Timer seconds={elapsed} />
-            </div>
-          )}
-          {status === 'transcribing' && (
-            <div className="vw-col">
-              <div className="vw-crow">
-                <span className="vw-spin" aria-hidden="true" />
-                <span className="vw-title">Refinando com IA</span>
-                <span className="vw-aux">transcrição bruta</span>
+            )}
+            {status === 'transcribing' && (
+              <div className="vw-col">
+                <div className="vw-crow">
+                  <span className="vw-spin" aria-hidden="true" />
+                  <span className="vw-title">Refinando com IA</span>
+                  <span className="vw-aux">transcrição bruta</span>
+                </div>
+                <TranscriptPreview text={rawText ?? 'Transcrevendo…'} />
               </div>
-              <TranscriptPreview text={rawText ?? 'Transcrevendo…'} />
-            </div>
-          )}
-          {status === 'done' && (
-            <div className="vw-row">
-              <CheckIcon />
-              <StatusLabel
-                title="Colado no cursor"
-                subtitle="Segure o atalho para gravar de novo"
-              />
-            </div>
-          )}
-          {status === 'error' && (
-            <div className="vw-row">
-              <StatusDot status="error" />
-              <StatusLabel title={error.title} subtitle={error.hint} />
-            </div>
-          )}
-        </Pill>
+            )}
+            {status === 'done' && (
+              <div className="vw-row">
+                <CheckIcon />
+                <StatusLabel
+                  title="Colado no cursor"
+                  subtitle="Segure o atalho para gravar de novo"
+                />
+              </div>
+            )}
+            {status === 'error' && (
+              <div className="vw-row">
+                <StatusDot status="error" />
+                <StatusLabel title={error.title} subtitle={error.hint} />
+              </div>
+            )}
+          </Pill>
+        </div>
+        <div className="vw-hint">{HINTS[status]}</div>
       </div>
-      <div className="vw-hint">{HINTS[status]}</div>
     </div>
   )
 }

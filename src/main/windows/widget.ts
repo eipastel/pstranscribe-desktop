@@ -2,11 +2,6 @@ import { BrowserWindow, screen } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
-// 520×220: cabe a pílula de 460px nos estados altos (104px) + hint + sombra do vidro
-const WIDTH = 520
-const HEIGHT = 220
-const TOP_RATIO = 0.15 // posição estilo Spotlight: topo a ~15% da altura da tela
-
 let widgetWindow: BrowserWindow | null = null
 
 export function getWidgetWindow(): BrowserWindow | null {
@@ -14,15 +9,15 @@ export function getWidgetWindow(): BrowserWindow | null {
 }
 
 export function createWidgetWindow(): BrowserWindow {
+  // Overlay fullscreen: cobre toda a área de trabalho; o CSS ancora a marca
+  // d'água (canto inf-esq) e a pílula (centro-topo) sem reposicionar a janela.
   const { workArea } = screen.getPrimaryDisplay()
-  const x = workArea.x + Math.round((workArea.width - WIDTH) / 2)
-  const y = workArea.y + Math.round(workArea.height * TOP_RATIO)
 
   const window = new BrowserWindow({
-    width: WIDTH,
-    height: HEIGHT,
-    x,
-    y,
+    width: workArea.width,
+    height: workArea.height,
+    x: workArea.x,
+    y: workArea.y,
     show: false,
     transparent: true,
     frame: false,
