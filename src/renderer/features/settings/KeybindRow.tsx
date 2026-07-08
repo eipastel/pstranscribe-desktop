@@ -1,17 +1,9 @@
 import './KeybindRow.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Button from '@/components/Button/Button'
-import { keybindParts, type Keybind } from '@shared/settings'
+import { keybindParts } from '@shared/settings'
 import type { PublicSettings, SettingsPatch } from '@shared/ipc'
-
-// Converte a tecla do KeyboardEvent para o nome que o uiohook entende
-function captureKey(e: KeyboardEvent): string | null {
-  if (/^[a-z]$/i.test(e.key)) return e.key.toUpperCase()
-  if (/^[0-9]$/.test(e.key)) return e.key
-  if (/^F([1-9]|1[0-9]|2[0-4])$/.test(e.key)) return e.key
-  if (e.key === ' ') return 'Space'
-  return null // modificador sozinho ou tecla sem mapeamento
-}
+import { useKeybindCapture } from '@/hooks/useKeybindCapture'
 
 interface KeybindRowProps {
   settings: PublicSettings
@@ -21,24 +13,14 @@ interface KeybindRowProps {
 function KeybindRow({ settings, update }: KeybindRowProps): React.JSX.Element {
   const [capturing, setCapturing] = useState(false)
 
-  useEffect(() => {
-    if (!capturing) return
-    const onKey = (e: KeyboardEvent): void => {
-      e.preventDefault()
-      e.stopPropagation()
-      if (e.key === 'Escape') {
-        setCapturing(false)
-        return
-      }
-      const key = captureKey(e)
-      if (!key) return // segue esperando uma tecla principal
-      const keybind: Keybind = { ctrl: e.ctrlKey, alt: e.altKey, shift: e.shiftKey, key }
+  useKeybindCapture(
+    capturing,
+    (keybind) => {
       update({ keybind })
       setCapturing(false)
-    }
-    window.addEventListener('keydown', onKey, true)
-    return () => window.removeEventListener('keydown', onKey, true)
-  }, [capturing, update])
+    },
+    () => setCapturing(false)
+  )
 
   return (
     <div className="settings-row">

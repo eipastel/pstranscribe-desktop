@@ -17,6 +17,8 @@ export interface Settings {
   autoLaunch: boolean
   /** Opacidade da janela do widget (0.5–1) */
   opacity: number
+  /** Onboarding de primeiro uso concluído */
+  onboarded: boolean
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -24,7 +26,8 @@ export const DEFAULT_SETTINGS: Settings = {
   transcrever: true,
   formatar: true,
   autoLaunch: false,
-  opacity: 1
+  opacity: 1,
+  onboarded: false
 }
 
 // Partes do atalho para exibição (ex.: ['Ctrl', 'P'] no keycap do widget)

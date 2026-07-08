@@ -1,0 +1,69 @@
+.onboarding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.onboarding-panel {
+  width: var(--pill-width);
+  padding: 16px 18px;
+  border-radius: var(--pill-radius-tall);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.onboarding-title {
+  font: var(--text-label);
+  letter-spacing: 0.1px;
+}
+
+.onboarding-desc {
+  font: var(--text-sub);
+  color: var(--fg-sub);
+  line-height: 1.5;
+}
+
+.onboarding-chips {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+.onboarding .keybind-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 7px;
+  background: var(--surface-soft-bg);
+  border: 1px solid var(--surface-soft-border);
+  font: var(--text-kbd);
+  color: var(--fg-kbd);
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.onboarding-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.onboarding-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.onboarding-dot[data-active='true'] {
+  background: #fff;
+}
