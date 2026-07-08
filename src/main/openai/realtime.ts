@@ -38,7 +38,6 @@ export function openRealtimeTranscription(
 
     ws.addEventListener('open', () => {
       open = true
-      console.log('realtime: conexão aberta, enviando session.update')
       // Formato GA da sessão de transcrição; server_vad segmenta pelas pausas.
       ws.send(
         JSON.stringify({
@@ -78,11 +77,10 @@ export function openRealtimeTranscription(
       } catch {
         return
       }
-      console.log('realtime: msg ←', msg.type)
       if (msg.type === 'conversation.item.input_audio_transcription.delta' && msg.delta)
         cb.onDelta(msg.delta)
       else if (msg.type === 'error') {
-        console.log('realtime: erro do servidor →', typeof ev.data === 'string' ? ev.data : ev.data)
+        console.log('realtime: erro do servidor →', typeof ev.data === 'string' ? ev.data : '')
         cb.onError(mapError(0, msg.error?.code))
       }
     })

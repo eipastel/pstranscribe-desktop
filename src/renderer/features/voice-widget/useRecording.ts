@@ -3,15 +3,22 @@ import { useWidgetStore } from '@/state/widget'
 import { startRecording, stopRecording } from './recorder'
 import { startPcmStream, stopPcmStream } from './pcmRecorder'
 
-// Liga o PTT global ao produto. Com "transcrição rápida" (respostaRapida) ligada,
-// grava e transcreve ao vivo, colando delta a delta no cursor; senão, mantém o
-// fluxo batch (grava tudo → STT → cola de uma vez).
+// Tempo real desativado por ora (digitação ainda instável em alguns alvos).
+// Com false, "transcrição rápida" volta a significar só "modelos rápidos" no
+// fluxo batch. Trocar para true reativa o modo ao vivo.
+const REALTIME_ENABLED = false
+
+// Liga o PTT global ao produto. Com "transcrição rápida" (respostaRapida) ligada
+// e o modo ao vivo habilitado, transcreve e digita no cursor enquanto se fala;
+// senão, mantém o fluxo batch (grava tudo → STT → cola de uma vez).
 export function useRecording(): void {
   const fast = useRef(false)
 
   useEffect(() => {
     const loadFast = (): void => {
-      void window.api.getSettings().then((s) => (fast.current = s.transcrever && s.respostaRapida))
+      void window.api
+        .getSettings()
+        .then((s) => (fast.current = REALTIME_ENABLED && s.transcrever && s.respostaRapida))
     }
     loadFast()
     const offSettings = window.api.onSettingsChanged(loadFast)
@@ -19,20 +26,33 @@ export function useRecording(): void {
     // Erro no meio da fala em tempo real: o já colado permanece, a pílula avisa.
     const offError = window.api.onRealtimeError((error) => useWidgetStore.getState().fail(error))
 
+    let held = false // PTT ainda pressionado? (evita entrar em listening após soltar)
+
     const offPress = window.api.onPttPress(() => {
       const store = useWidgetStore.getState()
       if (store.hasKey !== true) return // sem chave válida, não grava
-      store.press()
+      held = true
 
       if (fast.current) {
-        // Tempo real: abre a sessão e só então começa a empurrar áudio PCM16.
+        // Tempo real: abre a sessão e captura o mic; só entra em "listening"
+        // (animação) quando o mic está pronto — antes disso a pílula fica quieta.
         void window.api.startRealtime().then((res) => {
+          if (!held) return void window.api.stopRealtime() // soltou antes de abrir
           if (!res.ok) {
             useWidgetStore.getState().fail(res.error)
             return
           }
           return startPcmStream((pcm16) => window.api.sendRealtimeAudio(pcm16))
-            .then((stream) => useWidgetStore.getState().setMicStream(stream))
+            .then((stream) => {
+              if (!held) {
+                stream.getTracks().forEach((t) => t.stop())
+                void stopPcmStream().then(() => window.api.stopRealtime())
+                return
+              }
+              const s = useWidgetStore.getState()
+              s.press()
+              s.setMicStream(stream)
+            })
             .catch((err) => {
               console.error('mic:', err)
               useWidgetStore.getState().fail('network')
@@ -41,6 +61,7 @@ export function useRecording(): void {
         return
       }
 
+      store.press()
       void startRecording()
         .then((stream) => store.setMicStream(stream))
         .catch((err) => {
@@ -51,6 +72,7 @@ export function useRecording(): void {
 
     const offRelease = window.api.onPttRelease(() => {
       const store = useWidgetStore.getState()
+      held = false
 
       if (fast.current) {
         // Some a pílula na hora; o teardown (parar captura/sessão, esvaziar a
