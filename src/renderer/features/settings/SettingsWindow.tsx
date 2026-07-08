@@ -2,6 +2,7 @@ import './SettingsWindow.css'
 import { useEffect } from 'react'
 import Toggle from '@/components/Toggle/Toggle'
 import KeyRow from './KeyRow'
+import KeybindRow from './KeybindRow'
 import { useSettings } from './useSettings'
 
 // Painel de configurações fiel a VoiceSettings.dc.html
@@ -68,6 +69,7 @@ function SettingsWindow(): React.JSX.Element {
                 ariaLabel="Formatar"
               />
             </div>
+            <KeybindRow settings={settings} update={update} />
             <KeyRow />
           </>
         )}

@@ -10,6 +10,7 @@ import {
   PROCESS_AUDIO_CHANNEL,
   PROCESS_RAW_CHANNEL,
   SET_IGNORE_MOUSE_CHANNEL,
+  SETTINGS_CHANGED_CHANNEL,
   UPDATE_SETTINGS_CHANNEL,
   type ProcessResult,
   type PublicSettings,
@@ -19,6 +20,7 @@ import { loadSettings, saveSettings } from '../settings'
 import { clearApiKey, loadApiKey, maskedApiKey, storeApiKey, validateApiKey } from '../openai/key'
 import { processAudio } from '../openai/pipeline'
 import { pasteText } from '../paste'
+import { setPttKeybind } from '../ptt'
 
 function broadcastKeyChanged(): void {
   BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(KEY_CHANGED_CHANNEL))
@@ -43,6 +45,8 @@ export function registerIpcHandlers(): void {
     delete (safePatch as Record<string, unknown>).apiKeyEncrypted // nunca via este canal
     saveSettings({ ...loadSettings(), ...safePatch })
     console.log('settings:update', JSON.stringify(safePatch))
+    if (safePatch.keybind) setPttKeybind(safePatch.keybind) // atalho troca ao vivo
+    BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(SETTINGS_CHANGED_CHANNEL))
     return publicSettings()
   })
 

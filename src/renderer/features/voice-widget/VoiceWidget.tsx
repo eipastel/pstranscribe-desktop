@@ -63,7 +63,11 @@ function VoiceWidget(): React.JSX.Element {
 
   const [keyParts, setKeyParts] = useState<string[]>([])
   useEffect(() => {
-    void window.api.getSettings().then((s) => setKeyParts(keybindParts(s.keybind)))
+    const load = (): void => {
+      void window.api.getSettings().then((s) => setKeyParts(keybindParts(s.keybind)))
+    }
+    load()
+    return window.api.onSettingsChanged(load) // keycap acompanha o atalho ao vivo
   }, [])
 
   return (

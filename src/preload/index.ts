@@ -12,6 +12,7 @@ import {
   PROCESS_AUDIO_CHANNEL,
   PROCESS_RAW_CHANNEL,
   SET_IGNORE_MOUSE_CHANNEL,
+  SETTINGS_CHANGED_CHANNEL,
   UPDATE_SETTINGS_CHANNEL,
   type WidgetApi
 } from '../shared/ipc'
@@ -28,6 +29,7 @@ const api: WidgetApi = {
   setIgnoreMouseEvents: (ignore) => ipcRenderer.send(SET_IGNORE_MOUSE_CHANNEL, ignore),
   getSettings: () => ipcRenderer.invoke(GET_SETTINGS_CHANNEL),
   updateSettings: (patch) => ipcRenderer.invoke(UPDATE_SETTINGS_CHANNEL, patch),
+  onSettingsChanged: (callback) => subscribe(SETTINGS_CHANGED_CHANNEL, callback),
   onPttPress: (callback) => subscribe(PTT_PRESS_CHANNEL, callback),
   onPttRelease: (callback) => subscribe(PTT_RELEASE_CHANNEL, callback),
   setApiKey: (key) => ipcRenderer.invoke(KEY_SET_CHANNEL, key),

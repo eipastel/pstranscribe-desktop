@@ -4,6 +4,7 @@ export const PING_CHANNEL = 'ping'
 export const SET_IGNORE_MOUSE_CHANNEL = 'set-ignore-mouse-events'
 export const GET_SETTINGS_CHANNEL = 'settings:get'
 export const UPDATE_SETTINGS_CHANNEL = 'settings:update'
+export const SETTINGS_CHANGED_CHANNEL = 'settings:changed'
 
 /** Campos editáveis pelo renderer — a chave nunca passa por aqui */
 export type SettingsPatch = Partial<Omit<Settings, 'apiKeyEncrypted'>>
@@ -40,6 +41,7 @@ export interface WidgetApi {
   setIgnoreMouseEvents(ignore: boolean): void
   getSettings(): Promise<PublicSettings>
   updateSettings(patch: SettingsPatch): Promise<PublicSettings>
+  onSettingsChanged(callback: () => void): () => void
   onPttPress(callback: () => void): () => void
   onPttRelease(callback: () => void): () => void
   setApiKey(key: string): Promise<KeySetResult>

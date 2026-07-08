@@ -1,0 +1,16 @@
+.keybind-chips {
+  display: inline-flex;
+  gap: 4px;
+  flex: none;
+}
+
+.keybind-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 7px;
+  background: var(--surface-soft-bg);
+  border: 1px solid var(--surface-soft-border);
+  font: var(--text-kbd);
+  color: var(--fg-kbd);
+}
