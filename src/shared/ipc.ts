@@ -16,9 +16,14 @@ export interface KeySetResult {
   error?: KeyErrorCode
 }
 
-export const TRANSCRIBE_CHANNEL = 'audio:transcribe'
+export const PROCESS_AUDIO_CHANNEL = 'audio:process'
 
 export type TranscribeResult = { ok: true; text: string } | { ok: false; error: KeyErrorCode }
+
+export type ProcessError = KeyErrorCode | 'disabled'
+
+export type ProcessResult =
+  { ok: true; raw: string; text: string; formatted: boolean } | { ok: false; error: ProcessError }
 
 export interface WidgetApi {
   ping(): Promise<string>
@@ -29,5 +34,5 @@ export interface WidgetApi {
   setApiKey(key: string): Promise<KeySetResult>
   hasApiKey(): Promise<boolean>
   clearApiKey(): Promise<void>
-  transcribe(audio: ArrayBuffer): Promise<TranscribeResult>
+  processAudio(audio: ArrayBuffer): Promise<ProcessResult>
 }

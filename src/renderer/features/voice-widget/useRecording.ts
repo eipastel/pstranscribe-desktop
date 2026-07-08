@@ -19,8 +19,12 @@ export function useRecording(): void {
         if (!blob) return
         useWidgetStore.getState().setAudioBlob(blob)
         console.log(`audio blob pronto: ${blob.size} bytes (${blob.type})`)
-        const result = await window.api.transcribe(await blob.arrayBuffer())
-        console.log(result.ok ? `transcrição bruta: ${result.text}` : `stt erro: ${result.error}`)
+        const result = await window.api.processAudio(await blob.arrayBuffer())
+        console.log(
+          result.ok
+            ? `texto final: ${result.text} (formatted=${result.formatted})`
+            : `pipeline erro: ${result.error}`
+        )
       })
     })
     return () => {

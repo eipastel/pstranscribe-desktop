@@ -5,12 +5,12 @@ import {
   KEY_SET_CHANNEL,
   KEY_STATUS_CHANNEL,
   PING_CHANNEL,
-  SET_IGNORE_MOUSE_CHANNEL,
-  TRANSCRIBE_CHANNEL
+  PROCESS_AUDIO_CHANNEL,
+  SET_IGNORE_MOUSE_CHANNEL
 } from '../../shared/ipc'
 import { loadSettings } from '../settings'
 import { clearApiKey, loadApiKey, storeApiKey, validateApiKey } from '../openai/key'
-import { transcribeAudio } from '../openai/stt'
+import { processAudio } from '../openai/pipeline'
 
 export function registerIpcHandlers(): void {
   ipcMain.handle(PING_CHANNEL, () => {
@@ -31,12 +31,12 @@ export function registerIpcHandlers(): void {
 
   ipcMain.handle(KEY_CLEAR_CHANNEL, () => clearApiKey())
 
-  ipcMain.handle(TRANSCRIBE_CHANNEL, async (_event, audio: ArrayBuffer) => {
-    const result = await transcribeAudio(Buffer.from(audio))
+  ipcMain.handle(PROCESS_AUDIO_CHANNEL, async (_event, audio: ArrayBuffer) => {
+    const result = await processAudio(Buffer.from(audio))
     console.log(
-      'stt:',
+      'pipeline:',
       result.ok
-        ? `"${result.text.slice(0, 80)}" (${result.text.length} chars)`
+        ? `bruto="${result.raw.slice(0, 60)}" final="${result.text.slice(0, 60)}" formatted=${result.formatted}`
         : `erro ${result.error}`
     )
     return result
