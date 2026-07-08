@@ -21,7 +21,7 @@ App configurável e distribuível: tray com menu, janela de configurações fiel
 - macOS/Linux, backend proxy, auto-update, diarização/modelos pela UI.
 
 ## Subtasks
-- [ ] Tray com menu (Configurações/Sair) + janela de settings glass vazia abrindo/fechando
+- [x] Tray com menu (Configurações/Sair) + janela de settings glass vazia abrindo/fechando
 - [ ] Tela de settings fiel ao design: toggles Transcrever/Formatar ligados ao pipeline + IPC settings:update
 - [ ] Gestão da chave na tela: mascarada sk-…últimos4, substituir e remover
 - [ ] Keybind editável com captura na UI + PTT re-registrando ao vivo + keycap atualizado
