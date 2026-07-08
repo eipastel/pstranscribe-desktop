@@ -25,5 +25,5 @@ O produto funcionando ponta a ponta com a chave do próprio usuário: insere a c
 - [x] Porta de primeiro uso no widget: painel glass com Input + Salvar, estados checking/ok/error, PTT travado sem chave
 - [x] Pipeline STT no main: blob via IPC no release → gpt-4o-transcribe (language pt) → transcrição bruta
 - [x] Formatação por IA com flags transcrever/formatar; falha → cola o bruto
-- [ ] Colar no campo em foco: clipboard + Ctrl+V simulado + restauração
+- [x] Colar no campo em foco: clipboard + Ctrl+V simulado + restauração
 - [ ] Estados reais no widget: refinando com texto bruto real, erro claro, check ao colar

@@ -37,7 +37,8 @@ export function createWidgetWindow(): BrowserWindow {
   // (ex.: polling de cursor no main) numa batch futura.
   window.setIgnoreMouseEvents(true, { forward: true })
 
-  window.on('ready-to-show', () => window.show())
+  // showInactive: o widget aparece sem roubar o foco do app do usuário
+  window.on('ready-to-show', () => window.showInactive())
 
   if (is.dev) {
     // Espelha o console do renderer no terminal do dev
