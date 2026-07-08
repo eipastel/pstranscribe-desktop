@@ -70,6 +70,18 @@ function SettingsWindow(): React.JSX.Element {
                 ariaLabel="Formatar"
               />
             </div>
+            <div className={settings.transcrever ? 'settings-row' : 'settings-row dim'}>
+              <div className="settings-row-text">
+                <div className="settings-row-label">Resposta rápida</div>
+                <div className="settings-row-desc">Prioriza velocidade sobre qualidade</div>
+              </div>
+              <Toggle
+                checked={settings.transcrever && settings.respostaRapida}
+                onChange={(v) => update({ respostaRapida: v })}
+                disabled={!settings.transcrever}
+                ariaLabel="Resposta rápida"
+              />
+            </div>
             <KeybindRow settings={settings} update={update} />
             <div className="settings-row">
               <div className="settings-row-text">

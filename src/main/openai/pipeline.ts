@@ -13,10 +13,10 @@ export async function processAudio(
   audio: Buffer,
   onRaw?: (raw: string) => void
 ): Promise<PipelineResult> {
-  const { transcrever, formatar } = loadSettings()
+  const { transcrever, formatar, respostaRapida } = loadSettings()
   if (!transcrever) return { ok: false, error: 'disabled' }
 
-  const stt = await transcribeAudio(audio)
+  const stt = await transcribeAudio(audio, respostaRapida)
   if (!stt.ok) return stt
 
   const raw = stt.text.trim()

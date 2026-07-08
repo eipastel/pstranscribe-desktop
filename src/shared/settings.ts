@@ -13,6 +13,8 @@ export interface Settings {
   transcrever: boolean
   /** Enxuga a mensagem com IA mantendo o jeito humano (desligado = cola o bruto) */
   formatar: boolean
+  /** Prioriza velocidade: usa modelos menores/mais baratos no STT e na formatação */
+  respostaRapida: boolean
   /** Inicia junto com o Windows */
   autoLaunch: boolean
   /** Opacidade da janela do widget (0.5–1) */
@@ -28,6 +30,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keybind: { ctrl: true, alt: false, shift: false, key: 'P' },
   transcrever: true,
   formatar: true,
+  respostaRapida: false,
   autoLaunch: false,
   opacity: 1,
   onboarded: false

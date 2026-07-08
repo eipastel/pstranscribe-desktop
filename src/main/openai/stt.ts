@@ -2,15 +2,18 @@ import { loadApiKey, mapError } from './key'
 import type { TranscribeResult } from '../../shared/ipc'
 
 const STT_MODEL = 'gpt-4o-transcribe'
+const STT_FAST_MODEL = 'gpt-4o-mini-transcribe'
 const STT_FALLBACK_MODEL = 'whisper-1'
 
 // Blob webm/opus → transcrição bruta em pt. Erros voltam mapeados para a UI.
-export async function transcribeAudio(audio: Buffer): Promise<TranscribeResult> {
+// fast = modo resposta rápida: usa o modelo menor/mais barato.
+export async function transcribeAudio(audio: Buffer, fast = false): Promise<TranscribeResult> {
   const key = loadApiKey()
   if (!key) return { ok: false, error: 'invalid' }
 
-  const first = await callTranscription(key, audio, STT_MODEL)
-  if (first.ok || first.error !== 'model_unavailable') return normalize(first)
+  const first = await callTranscription(key, audio, fast ? STT_FAST_MODEL : STT_MODEL)
+  // Modo rápido não degrada: se o modelo rápido faltar, erra em vez de cair no padrão.
+  if (fast || first.ok || first.error !== 'model_unavailable') return normalize(first)
   console.log(`stt: ${STT_MODEL} indisponível, tentando ${STT_FALLBACK_MODEL}`)
   return normalize(await callTranscription(key, audio, STT_FALLBACK_MODEL))
 }
