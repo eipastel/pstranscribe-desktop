@@ -10,6 +10,6 @@ limits:
   max_questions: 5
 apply_mode: one_task_at_a_time
 approval_required: true
-pr_flow: true
+pr_flow: false
 github:
   enabled: true

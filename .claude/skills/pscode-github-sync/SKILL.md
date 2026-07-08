@@ -1,12 +1,12 @@
 ---
 name: pscode-github-sync
-description: "Keeps the GitHub Issue, board status, assignee, PR and comments in sync with the guided flow, using gh. Use it from every /ps:* step when pscode/github.yaml exists. Every gh call is non-blocking."
+description: "Keeps the GitHub Issue, board status, assignee, comments in sync with the guided flow, using gh. Use it from every /ps:* step when pscode/github.yaml exists. Every gh call is non-blocking."
 generatedBy: 3.1.2
 ---
 
 # GitHub Sync
 
-Keep the change's **GitHub Issue + Project board + PR** in sync with the flow.
+Keep the change's **GitHub Issue + Project board** in sync with the flow.
 Run this from the steps that change state. **Conditional, not optional**: it acts
 whenever `pscode/github.yaml` exists, and then you run *every* action the step
 prescribes — assign, **move the card**, comment. "Non-blocking" means **tolerate
@@ -38,9 +38,9 @@ one, use it instead of resolving.
 | `/ps:draft`      | Backlog         | `backlog`         | create Issue (body = the short draft), add to Project |
 | `/ps:refine` (in)| In Refinement   | `proposed`        | **assign user** |
 | `/ps:refine` (out)| Ready to Dev   | `ready_to_dev`    | **create a sub-issue per subtask**, update Issue body from `refine.md` |
-| `/ps:dev` (start)| In Development  | `in_progress`     | open **draft PR** (`Closes #`), **assign user** |
+| `/ps:dev` (start)| In Development  | `in_progress`     | **assign user** |
 | `/ps:dev` (subtask)| —             | —                 | on each subtask `[x]`, **close its sub-issue** |
-| `/ps:dev` (review)| In Code Review | `review`          | mark PR **Ready for Review** |
+| `/ps:dev` (review)| In Code Review | `review`          | — |
 | `/ps:dev` (test) | In Test         | `in_test`         | — |
 | `/ps:dev` (deploy)| Ready to Deploy| `ready_to_deploy` | — |
 | `/ps:complete`   | Done            | `done`            | comment, then **close** the Issue |
@@ -128,16 +128,6 @@ the card's progress bar honest by closing the matching sub-issue.
 gh issue close <childNumber> --repo <repo>
 ```
 
-**Open the PR as a draft, linked to the Issue (`/ps:dev`):**
-```bash
-gh pr create --repo <repo> --draft --fill --body "Closes #<issue>"
-```
-
-**Mark the PR Ready for Review (`/ps:dev` review gate):**
-```bash
-gh pr ready <pr> --repo <repo>
-```
-
 **Add to the Project (returns the item id):**
 ```bash
 gh project item-add <project> --owner <owner> --url <issueUrl> --format json
@@ -181,4 +171,4 @@ step prescribes — the **status move is the whole point**, never skip it just
 because it costs two commands or the `assign` already ran. If `gh` is missing,
 unauthenticated, or the repo has no remote, say how to fix it (`gh auth login`,
 etc.) and **continue the flow** — the guided steps never depend on the sync
-succeeding. **Never merge the PR** — that stays a human/CI decision.
+succeeding.

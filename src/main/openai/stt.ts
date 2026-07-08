@@ -40,7 +40,7 @@ async function callTranscription(key: string, audio: Buffer, model: string): Pro
     })
     if (res.ok) {
       const data = (await res.json()) as { text?: string }
-      return { ok: true, text: data.text ?? '' }
+      return { ok: true, text: data.text ?? '', model }
     }
     let code: string | undefined
     try {

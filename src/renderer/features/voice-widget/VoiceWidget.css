@@ -17,6 +17,28 @@
   white-space: nowrap;
 }
 
+/* Badge de conceitos pendentes: chip clicável logo acima da marca d'água. */
+.vw-badge {
+  position: absolute;
+  bottom: 44px;
+  left: 16px;
+  pointer-events: auto;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--surface-soft-bg);
+  border: 1px solid var(--surface-soft-border);
+  color: var(--fg);
+  font: var(--text-sub);
+}
+
+.vw-badge:hover {
+  opacity: 0.85;
+}
+
 /* Pílula + hint ancoradas no centro-topo da tela (~15%, como o antigo TOP_RATIO). */
 .vw-pill {
   position: absolute;

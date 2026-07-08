@@ -23,4 +23,4 @@ Use the **pscode-complete** skill.
 
 Use the **pscode-github-sync** skill: **move the card → Done** (`done`) and
 confirm the move landed, comment the conclusion, then **close** the Issue.
-Merging the PR stays human/CI. Non-blocking only on `gh` failure.
+Non-blocking only on `gh` failure.

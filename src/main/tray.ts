@@ -1,6 +1,6 @@
 import { app, Menu, Tray, nativeImage } from 'electron'
 import icon from '../../resources/icon.png?asset'
-import { openSettingsWindow } from './windows/settings'
+import { openAppWindow } from './windows/app'
 
 let tray: Tray | null = null
 
@@ -10,10 +10,10 @@ export function createTray(): void {
   tray.setToolTip('PSTranscribe')
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'Configurações', click: () => openSettingsWindow() },
+      { label: 'Aplicativo', click: () => openAppWindow() },
       { type: 'separator' },
       { label: 'Sair', click: () => app.quit() }
     ])
   )
-  tray.on('double-click', () => openSettingsWindow())
+  tray.on('double-click', () => openAppWindow())
 }

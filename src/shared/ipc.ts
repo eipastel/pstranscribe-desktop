@@ -1,4 +1,6 @@
 import type { Settings } from './settings'
+import type { HistoryStats, TranscriptionRecord } from './history'
+import type { ReviewAction } from './glossary'
 
 export const PING_CHANNEL = 'ping'
 export const SET_IGNORE_MOUSE_CHANNEL = 'set-ignore-mouse-events'
@@ -27,14 +29,38 @@ export interface KeySetResult {
 
 export const PROCESS_AUDIO_CHANNEL = 'audio:process'
 export const PROCESS_RAW_CHANNEL = 'audio:raw'
+export const GET_HISTORY_CHANNEL = 'history:get'
 
-export type TranscribeResult = { ok: true; text: string } | { ok: false; error: KeyErrorCode }
+// Transcrição em tempo real (modo respostaRapida): sessão WebSocket no main.
+export const REALTIME_START_CHANNEL = 'realtime:start'
+export const REALTIME_AUDIO_CHANNEL = 'realtime:audio'
+export const REALTIME_STOP_CHANNEL = 'realtime:stop'
+export const REALTIME_DELTA_CHANNEL = 'realtime:delta'
+export const REALTIME_ERROR_CHANNEL = 'realtime:error'
+
+export const CONCEPTS_COUNT_CHANNEL = 'concepts:count'
+export const CONCEPTS_LIST_CHANNEL = 'concepts:list'
+export const CONCEPTS_REVIEW_CHANNEL = 'concepts:review'
+export const CONCEPTS_CHANGED_CHANNEL = 'concepts:changed'
+export const CONCEPTS_OPEN_CHANNEL = 'concepts:open'
+
+export interface HistoryPayload {
+  /** registros mais recentes primeiro */
+  records: TranscriptionRecord[]
+  stats: HistoryStats
+}
+
+export type TranscribeResult =
+  | { ok: true; text: string; model: string }
+  | { ok: false; error: KeyErrorCode }
 
 export type ProcessError = KeyErrorCode | 'disabled'
 
 export type ProcessResult =
   | { ok: true; raw: string; text: string; formatted: boolean; pasted: boolean }
   | { ok: false; error: ProcessError }
+
+export type RealtimeStartResult = { ok: true } | { ok: false; error: ProcessError }
 
 export interface WidgetApi {
   ping(): Promise<string>
@@ -49,6 +75,17 @@ export interface WidgetApi {
   clearApiKey(): Promise<void>
   getMaskedApiKey(): Promise<string | null>
   onKeyChanged(callback: () => void): () => void
-  processAudio(audio: ArrayBuffer): Promise<ProcessResult>
+  processAudio(audio: ArrayBuffer, seconds: number): Promise<ProcessResult>
   onRawText(callback: (raw: string) => void): () => void
+  startRealtime(): Promise<RealtimeStartResult>
+  sendRealtimeAudio(pcm16: ArrayBuffer): void
+  stopRealtime(): Promise<void>
+  onRealtimeDelta(callback: (text: string) => void): () => void
+  onRealtimeError(callback: (error: ProcessError) => void): () => void
+  getHistory(): Promise<HistoryPayload>
+  getConceptsCount(): Promise<number>
+  getConcepts(): Promise<string[]>
+  reviewConcept(term: string, action: ReviewAction, spelling?: string): Promise<void>
+  onConceptsChanged(callback: () => void): () => void
+  openConcepts(): void
 }

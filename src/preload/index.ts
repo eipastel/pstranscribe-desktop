@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import {
+  GET_HISTORY_CHANNEL,
   GET_SETTINGS_CHANNEL,
   KEY_CHANGED_CHANNEL,
   KEY_CLEAR_CHANNEL,
@@ -14,6 +15,17 @@ import {
   SET_IGNORE_MOUSE_CHANNEL,
   SETTINGS_CHANGED_CHANNEL,
   UPDATE_SETTINGS_CHANNEL,
+  CONCEPTS_COUNT_CHANNEL,
+  CONCEPTS_LIST_CHANNEL,
+  CONCEPTS_REVIEW_CHANNEL,
+  CONCEPTS_CHANGED_CHANNEL,
+  CONCEPTS_OPEN_CHANNEL,
+  REALTIME_START_CHANNEL,
+  REALTIME_AUDIO_CHANNEL,
+  REALTIME_STOP_CHANNEL,
+  REALTIME_DELTA_CHANNEL,
+  REALTIME_ERROR_CHANNEL,
+  type ProcessError,
   type WidgetApi
 } from '../shared/ipc'
 
@@ -37,11 +49,31 @@ const api: WidgetApi = {
   clearApiKey: () => ipcRenderer.invoke(KEY_CLEAR_CHANNEL),
   getMaskedApiKey: () => ipcRenderer.invoke(KEY_MASKED_CHANNEL),
   onKeyChanged: (callback) => subscribe(KEY_CHANGED_CHANNEL, callback),
-  processAudio: (audio) => ipcRenderer.invoke(PROCESS_AUDIO_CHANNEL, audio),
+  processAudio: (audio, seconds) => ipcRenderer.invoke(PROCESS_AUDIO_CHANNEL, audio, seconds),
+  getHistory: () => ipcRenderer.invoke(GET_HISTORY_CHANNEL),
+  getConceptsCount: () => ipcRenderer.invoke(CONCEPTS_COUNT_CHANNEL),
+  getConcepts: () => ipcRenderer.invoke(CONCEPTS_LIST_CHANNEL),
+  reviewConcept: (term, action, spelling) =>
+    ipcRenderer.invoke(CONCEPTS_REVIEW_CHANNEL, term, action, spelling),
+  onConceptsChanged: (callback) => subscribe(CONCEPTS_CHANGED_CHANNEL, callback),
+  openConcepts: () => ipcRenderer.send(CONCEPTS_OPEN_CHANNEL),
   onRawText: (callback) => {
     const listener = (_e: Electron.IpcRendererEvent, raw: string): void => callback(raw)
     ipcRenderer.on(PROCESS_RAW_CHANNEL, listener)
     return () => ipcRenderer.removeListener(PROCESS_RAW_CHANNEL, listener)
+  },
+  startRealtime: () => ipcRenderer.invoke(REALTIME_START_CHANNEL),
+  sendRealtimeAudio: (pcm16) => ipcRenderer.send(REALTIME_AUDIO_CHANNEL, pcm16),
+  stopRealtime: () => ipcRenderer.invoke(REALTIME_STOP_CHANNEL),
+  onRealtimeDelta: (callback) => {
+    const listener = (_e: Electron.IpcRendererEvent, text: string): void => callback(text)
+    ipcRenderer.on(REALTIME_DELTA_CHANNEL, listener)
+    return () => ipcRenderer.removeListener(REALTIME_DELTA_CHANNEL, listener)
+  },
+  onRealtimeError: (callback) => {
+    const listener = (_e: Electron.IpcRendererEvent, error: ProcessError): void => callback(error)
+    ipcRenderer.on(REALTIME_ERROR_CHANNEL, listener)
+    return () => ipcRenderer.removeListener(REALTIME_ERROR_CHANNEL, listener)
   }
 }
 

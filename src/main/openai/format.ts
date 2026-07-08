@@ -1,7 +1,13 @@
 import { loadApiKey } from './key'
 
 // Modelo pequeno mais forte da lineup 2026; barato o bastante por mensagem
-const FORMAT_MODEL = 'gpt-5.4-mini'
+export const FORMAT_MODEL = 'gpt-5.4-mini'
+
+export interface FormatResult {
+  text: string
+  model: string
+  tokens: number
+}
 
 const SYSTEM_PROMPT = `Você recebe a transcrição bruta de uma fala em português e devolve a mesma mensagem enxuta, pronta para ser colada num chat.
 Regras:
@@ -11,7 +17,7 @@ Regras:
 - Responda SÓ com a mensagem final, sem aspas nem comentários.`
 
 // null = formatação falhou → quem chama cola o texto bruto (degrada com elegância)
-export async function formatText(raw: string): Promise<string | null> {
+export async function formatText(raw: string): Promise<FormatResult | null> {
   const key = loadApiKey()
   if (!key) return null
   try {
@@ -27,9 +33,13 @@ export async function formatText(raw: string): Promise<string | null> {
       })
     })
     if (!res.ok) return null
-    const data = (await res.json()) as { choices?: { message?: { content?: string } }[] }
+    const data = (await res.json()) as {
+      choices?: { message?: { content?: string } }[]
+      usage?: { total_tokens?: number }
+    }
     const text = data.choices?.[0]?.message?.content?.trim()
-    return text || null
+    if (!text) return null
+    return { text, model: FORMAT_MODEL, tokens: data.usage?.total_tokens ?? 0 }
   } catch {
     return null
   }

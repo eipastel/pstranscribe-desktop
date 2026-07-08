@@ -5,7 +5,6 @@ import Waveform from '@/components/Waveform/Waveform'
 import StatusLabel from '@/components/StatusLabel/StatusLabel'
 import Timer from '@/components/Timer/Timer'
 import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
-import CheckIcon from '@/components/CheckIcon/CheckIcon'
 import StatusDot from '@/components/StatusDot/StatusDot'
 import { useWidgetStore, type WidgetStatus, type WidgetError } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
@@ -17,7 +16,6 @@ const HINTS: Record<WidgetStatus, string> = {
   idle: 'Segure o atalho para falar',
   listening: 'Solte para transcrever',
   transcribing: 'A IA está enxugando o texto…',
-  done: 'Texto tratado colado onde o cursor estava',
   error: 'Segure o atalho para tentar de novo'
 }
 
@@ -50,10 +48,23 @@ function VoiceWidget(): React.JSX.Element {
     return window.api.onSettingsChanged(load) // keycap acompanha o atalho ao vivo
   }, [])
 
+  // Conceitos pendentes de revisão; a contagem acompanha a extração ao vivo.
+  const [pending, setPending] = useState(0)
+  useEffect(() => {
+    const load = (): void => void window.api.getConceptsCount().then(setPending)
+    load()
+    return window.api.onConceptsChanged(load)
+  }, [])
+
   // Em repouso: só uma marca d'água discreta no canto; a pílula surge sob demanda.
   if (status === 'idle') {
     return (
       <div className="voice-widget">
+        {pending > 0 && (
+          <button className="vw-badge" {...hoverHandlers} onClick={() => window.api.openConcepts()}>
+            {pending} {pending === 1 ? 'conceito' : 'conceitos'} para revisar
+          </button>
+        )}
         <div className="vw-watermark">
           Segure {keyParts.length ? keyParts.join(' + ') : 'o atalho'} para falar
         </div>
@@ -83,15 +94,6 @@ function VoiceWidget(): React.JSX.Element {
                   <span className="vw-aux">transcrição bruta</span>
                 </div>
                 <TranscriptPreview text={rawText ?? 'Transcrevendo…'} />
-              </div>
-            )}
-            {status === 'done' && (
-              <div className="vw-row">
-                <CheckIcon />
-                <StatusLabel
-                  title="Colado no cursor"
-                  subtitle="Segure o atalho para gravar de novo"
-                />
               </div>
             )}
             {status === 'error' && (

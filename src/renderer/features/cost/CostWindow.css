@@ -1,0 +1,108 @@
+/* Painel de conteúdo dentro do shell (o vidro é do .app-shell) */
+.cost-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.cost-head {
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.cost-title {
+  font: 600 17px/1.3 var(--font-stack);
+  letter-spacing: 0.1px;
+}
+
+.cost-sub {
+  font: 400 12.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 3px;
+}
+
+.cost-body {
+  padding: 18px 26px 20px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.cost-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.cost-card {
+  padding: 14px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.cost-card-value {
+  font: 600 16px/1.2 var(--font-stack);
+  letter-spacing: 0.2px;
+}
+
+.cost-card-label {
+  font: 400 10.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 5px;
+}
+
+.cost-empty {
+  padding: 26px 0;
+  text-align: center;
+  color: var(--fg-sub);
+  font: 400 13px/1.4 var(--font-stack);
+}
+
+.cost-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.cost-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 2px;
+}
+
+.cost-item + .cost-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.cost-item-main {
+  min-width: 0;
+}
+
+.cost-item-date {
+  display: block;
+  font: 500 13px/1.3 var(--font-stack);
+}
+
+.cost-item-meta {
+  display: block;
+  font: 400 11.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 2px;
+}
+
+.cost-item-value {
+  flex: none;
+  font: 600 13px/1.2 var(--font-stack);
+  font-variant-numeric: tabular-nums;
+}
