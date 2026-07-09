@@ -1,9 +1,13 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  # 1) PR mergeada que tem a label "release" → builda a main já mesclada.
+  pull_request:
+    types: [closed]
+  # 2) Release criado manualmente pela interface do GitHub (gera a tag) →
+  #    builda o código da tag e anexa o instalador.
+  release:
+    types: [published]
 
 permissions:
   contents: write
@@ -12,9 +16,17 @@ jobs:
   release:
     name: Build · Publish (Windows)
     runs-on: windows-latest
+    # Dispara em: release publicado manualmente OU PR mergeada com a label "release".
+    if: >
+      github.event_name == 'release' ||
+      (github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'release'))
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # release → a tag; PR mergeada → o commit de merge (a main já mesclada).
+          ref: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.pull_request.merge_commit_sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -28,8 +40,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      # A versão do release vem da tag (electron-builder lê package.json; a tag deve casar).
-      # Publica o instalador + latest.yml no GitHub Releases (auto-update lê de lá).
+      # Versão vem do package.json. Publica o instalador + latest.yml no
+      # GitHub Releases (o auto-update lê de lá).
       - name: Empacotar e publicar
         run: npx electron-builder --win --publish always
         env:
