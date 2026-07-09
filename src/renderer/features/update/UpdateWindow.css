@@ -51,3 +51,26 @@
 .update-action {
   margin-top: 10px;
 }
+
+/* Spinner dentro do botão enquanto busca atualização. */
+.update-spin {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--fg);
+  animation: update-spin 0.7s linear infinite;
+  flex: none;
+}
+
+@keyframes update-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-spin {
+    animation: none;
+  }
+}

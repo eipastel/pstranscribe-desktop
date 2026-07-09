@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import icon from '../../../resources/icon.png?asset'
 
 let appWindow: BrowserWindow | null = null
 
@@ -18,6 +19,7 @@ export function openAppWindow(): void {
     width: 760,
     height: 660,
     show: false,
+    icon, // mesmo ícone da bandeja na barra de tarefas
     transparent: true,
     frame: false,
     resizable: false,
