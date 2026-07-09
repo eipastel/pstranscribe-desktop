@@ -27,5 +27,5 @@ isso por **só o spinner centralizado**, sem nenhum texto.
   continua alimentando o store sem exibir — fica para outro card.
 
 ## Subtasks
-- [ ] Substituir o bloco de transcrição por só o spinner centralizado e ocultar o hint no loading (VoiceWidget.tsx + VoiceWidget.css)
+- [x] Substituir o bloco de transcrição por só o spinner centralizado e ocultar o hint no loading (VoiceWidget.tsx + VoiceWidget.css)
 - [ ] Remover o componente TranscriptPreview (arquivo + CSS) e o uso órfão de rawText/import no VoiceWidget

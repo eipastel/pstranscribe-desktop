@@ -4,7 +4,6 @@ import Pill from '@/components/Pill/Pill'
 import Waveform from '@/components/Waveform/Waveform'
 import StatusLabel from '@/components/StatusLabel/StatusLabel'
 import Timer from '@/components/Timer/Timer'
-import TranscriptPreview from '@/components/TranscriptPreview/TranscriptPreview'
 import StatusDot from '@/components/StatusDot/StatusDot'
 import { useWidgetStore, type WidgetStatus, type WidgetError } from '@/state/widget'
 import { useClickThrough } from '@/hooks/useClickThrough'
@@ -32,7 +31,6 @@ function VoiceWidget(): React.JSX.Element {
   const status = useWidgetStore((s) => s.status)
   const elapsed = useWidgetStore((s) => s.elapsed)
   const micStream = useWidgetStore((s) => s.micStream)
-  const rawText = useWidgetStore((s) => s.rawText)
   const errorCode = useWidgetStore((s) => s.errorCode)
   const hoverHandlers = useClickThrough()
   useRecording()
@@ -88,12 +86,7 @@ function VoiceWidget(): React.JSX.Element {
             )}
             {status === 'transcribing' && (
               <div className="vw-col">
-                <div className="vw-crow">
-                  <span className="vw-spin" aria-hidden="true" />
-                  <span className="vw-title">Refinando com IA</span>
-                  <span className="vw-aux">transcrição bruta</span>
-                </div>
-                <TranscriptPreview text={rawText ?? 'Transcrevendo…'} />
+                <span className="vw-spin" aria-hidden="true" />
               </div>
             )}
             {status === 'error' && (
@@ -104,7 +97,7 @@ function VoiceWidget(): React.JSX.Element {
             )}
           </Pill>
         </div>
-        <div className="vw-hint">{HINTS[status]}</div>
+        {status !== 'transcribing' && <div className="vw-hint">{HINTS[status]}</div>}
       </div>
     </div>
   )
