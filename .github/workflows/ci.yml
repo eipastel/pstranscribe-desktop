@@ -6,41 +6,11 @@ on:
   pull_request:
 
 jobs:
-  # Um job por tarefa → cada um aparece como um check separado no PR.
-  # (Jobs rodam em runners distintos; o cache npm do setup-node acelera o npm ci
-  #  de todos.)
-  check:
-    name: ${{ matrix.name }}
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { name: format, cmd: npm run format:check }
-          - { name: lint, cmd: npm run lint }
-          - { name: typecheck, cmd: npm run typecheck }
-          - { name: build, cmd: npx electron-vite build }
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Instalar dependências
-        run: npm ci
-
-      - name: ${{ matrix.name }}
-        run: ${{ matrix.cmd }}
-
-  # Testes unitários com gate de cobertura. Job próprio no ubuntu (mais rápido; o
-  # nativo é mockado). test:coverage falha se algum teste quebrar ou a cobertura
-  # da lógica pura cair abaixo de 85% → barra o merge.
-  unit-tests:
-    name: unit-tests
+  # Um job só, steps em ordem barato→caro. Steps param no primeiro que falhar,
+  # então format quebrado nem chega a rodar build. Ubuntu porque nada aqui é
+  # Windows-específico (nativo é mockado/externo; build só empacota).
+  ci:
+    name: ci
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,10 +23,20 @@ jobs:
           cache: npm
 
       # --ignore-scripts pula o rebuild nativo (electron-builder install-app-deps):
-      # os testes mockam o nativo (uiohook/electron), então não precisa buildar.
+      # testes mockam o nativo e o build só empacota, então não precisa buildar.
       - name: Instalar dependências
         run: npm ci --ignore-scripts
 
+      - name: Formatação
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Falha se algum teste quebrar ou a cobertura da lógica pura cair <85%.
       - name: Testes + cobertura
         run: npm run test:coverage
 
@@ -66,3 +46,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           fail_ci_if_error: false
+
+      # Mais caro por último: só roda se tudo acima passou.
+      - name: Build
+        run: npx electron-vite build
