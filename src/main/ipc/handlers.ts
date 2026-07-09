@@ -50,7 +50,7 @@ import {
 } from '../glossary'
 import { computeStats } from '../../shared/history'
 import { pasteText, enqueuePaste, flushPasteQueue, warmPaste } from '../paste'
-import { setPttKeybind } from '../ptt'
+import { setPttKeybind, setToggleKeybind } from '../ptt'
 import { app } from 'electron'
 import { getWidgetWindow } from '../windows/widget'
 import { openConceptsWindow } from '../windows/concepts'
@@ -86,6 +86,7 @@ export function registerIpcHandlers(): void {
     saveSettings({ ...loadSettings(), ...safePatch })
     console.log('settings:update', JSON.stringify(safePatch))
     if (safePatch.keybind) setPttKeybind(safePatch.keybind) // atalho troca ao vivo
+    if (safePatch.keybindContinuo) setToggleKeybind(safePatch.keybindContinuo)
     if (safePatch.autoLaunch !== undefined)
       app.setLoginItemSettings({ openAtLogin: safePatch.autoLaunch })
     if (safePatch.opacity !== undefined) getWidgetWindow()?.setOpacity(safePatch.opacity)
