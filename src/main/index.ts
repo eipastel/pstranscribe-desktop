@@ -7,6 +7,7 @@ import { loadSettings } from './settings'
 import { startPushToTalk, setToggleKeybind } from './ptt'
 import { createTray } from './tray'
 import { openAppWindow } from './windows/app'
+import { initCapture, setCapture } from './capture'
 
 // Trava de instância única: uma 2ª cópia sai na hora e devolve o foco à janela
 // do app na 1ª. Evita dois ícones na bandeja / dois widgets rodando juntos.
@@ -25,7 +26,11 @@ function bootstrap(): void {
       optimizer.watchWindowShortcuts(window)
     })
 
+    // Antes de criar janelas: prende os hooks de captura (o observador de
+    // web-contents precisa existir antes das janelas nascerem).
+    initCapture()
     const settings = loadSettings()
+    setCapture(settings.debugLogs)
     registerIpcHandlers()
     createTray()
     const window = createWidgetWindow()

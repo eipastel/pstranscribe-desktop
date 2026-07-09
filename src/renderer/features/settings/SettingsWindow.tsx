@@ -103,6 +103,19 @@ function SettingsWindow(): React.JSX.Element {
               />
             </div>
             <KeyRow />
+            <div className="settings-row">
+              <div className="settings-row-text">
+                <div className="settings-row-label">Modo debug (logs)</div>
+                <div className="settings-row-desc">
+                  Captura os logs do app numa aba dedicada, para diagnóstico
+                </div>
+              </div>
+              <Toggle
+                checked={settings.debugLogs}
+                onChange={(v) => update({ debugLogs: v })}
+                ariaLabel="Modo debug (logs)"
+              />
+            </div>
           </>
         )}
       </div>

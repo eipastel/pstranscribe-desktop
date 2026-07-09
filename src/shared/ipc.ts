@@ -1,6 +1,7 @@
 import type { Settings } from './settings'
 import type { HistoryStats, TranscriptionRecord } from './history'
 import type { ReviewAction, SavedConcepts } from './glossary'
+import type { LogEntry } from './logs'
 
 export const PING_CHANNEL = 'ping'
 export const SET_IGNORE_MOUSE_CHANNEL = 'set-ignore-mouse-events'
@@ -55,6 +56,11 @@ export const UPDATE_CHECK_CHANNEL = 'update:check'
 export const UPDATE_DOWNLOAD_CHANNEL = 'update:download'
 export const UPDATE_INSTALL_CHANNEL = 'update:install' // reinicia e aplica
 export const UPDATE_STATUS_CHANNEL = 'update:status' // main → renderer, a cada mudança
+
+// Modo debug: buffer de logs no main, lido/limpo pela aba Logs.
+export const LOGS_GET_CHANNEL = 'logs:get'
+export const LOGS_CLEAR_CHANNEL = 'logs:clear'
+export const LOGS_CHANGED_CHANNEL = 'logs:changed' // main → renderer, ao acumular/limpar
 
 /** Estados do fluxo de atualização, na ordem em que a UI os mostra. */
 export type UpdateState =
@@ -170,4 +176,10 @@ export interface WidgetApi {
   installUpdate(): Promise<void>
   /** Avisa a cada mudança de estado do updater. */
   onUpdateStatus(callback: (status: UpdateStatus) => void): () => void
+  /** Logs capturados pelo modo debug (mais antigo → mais novo). */
+  getLogs(): Promise<LogEntry[]>
+  /** Zera o buffer de logs (memória + arquivo). */
+  clearLogs(): Promise<void>
+  /** Avisa quando os logs acumulam ou são limpos (para a aba Logs recarregar). */
+  onLogsChanged(callback: () => void): () => void
 }
