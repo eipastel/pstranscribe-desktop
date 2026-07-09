@@ -18,8 +18,30 @@ let activeToggle: ActiveBind | null = null
 let toggleDown = false // debounce do auto-repeat do keydown
 let listening = false // toggle no meio de uma captura
 
+// ponytail: teto fixo ~2 min; virar config se alguém pedir. Protege contra o
+// limite ~25MB do STT quando o usuário esquece o modo contínuo ligado.
+const TOGGLE_AUTO_STOP_MS = 2 * 60 * 1000
+let autoStopTimer: ReturnType<typeof setTimeout> | null = null
+
 function emit(channel: string): void {
   mainWindow?.webContents.send(channel)
+}
+
+function clearAutoStop(): void {
+  if (autoStopTimer) {
+    clearTimeout(autoStopTimer)
+    autoStopTimer = null
+  }
+}
+
+function armAutoStop(): void {
+  clearAutoStop()
+  autoStopTimer = setTimeout(() => {
+    if (!listening) return
+    listening = false
+    console.log('ptt: toggle auto-stop')
+    emit(PTT_RELEASE_CHANNEL)
+  }, TOGGLE_AUTO_STOP_MS)
 }
 
 // Troca o atalho ao vivo, sem reiniciar o hook. false = tecla desconhecida.
@@ -45,6 +67,7 @@ export function setToggleKeybind(keybind: Keybind): boolean {
   activeToggle = { keycode, keybind }
   toggleDown = false
   listening = false
+  clearAutoStop()
   console.log('ptt: keybind contínuo ativo →', JSON.stringify(keybind))
   return true
 }
@@ -88,9 +111,11 @@ export function startPushToTalk(window: BrowserWindow, keybind: Keybind): void {
     if (listening) {
       console.log('ptt: toggle on')
       emit(PTT_PRESS_CHANNEL)
+      armAutoStop()
     } else {
       console.log('ptt: toggle off')
       emit(PTT_RELEASE_CHANNEL)
+      clearAutoStop()
     }
   })
 

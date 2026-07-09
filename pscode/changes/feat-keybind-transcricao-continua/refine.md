@@ -48,6 +48,6 @@ que sem manter a tecla pressionada. Configurável nas Configurações.
 ## Subtasks
 - [x] Adicionar `keybindContinuo` a `Settings`/`DEFAULT_SETTINGS` (padrão Ctrl+Shift+Space).
 - [x] `ptt.ts`: registrar o keybind de toggle, alternar PTT_PRESS/RELEASE com debounce e exclusão mútua com o hold.
-- [ ] `ptt.ts`: auto-stop de segurança (teto de tempo) que emite PTT_RELEASE.
+- [x] `ptt.ts`: auto-stop de segurança (teto de tempo) que emite PTT_RELEASE.
 - [ ] Live update do keybind contínuo (`setToggleKeybind` em `handlers.ts`) e passar na init em `index.ts`.
 - [ ] Parametrizar `KeybindRow` e adicionar a 2ª linha nas Configurações.
