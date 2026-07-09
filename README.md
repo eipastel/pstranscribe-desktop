@@ -4,6 +4,7 @@
 
 ![Plataforma](https://img.shields.io/badge/plataforma-Windows-0078D6)
 [![CI](https://img.shields.io/github/actions/workflow/status/eipastel/pstranscribe-desktop/ci.yml?branch=main&label=CI)](https://github.com/eipastel/pstranscribe-desktop/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/eipastel/pstranscribe-desktop/graph/badge.svg)](https://codecov.io/gh/eipastel/pstranscribe-desktop)
 [![Versão](https://img.shields.io/github/v/release/eipastel/pstranscribe-desktop?label=vers%C3%A3o)](https://github.com/eipastel/pstranscribe-desktop/releases/latest)
 [![Download](https://img.shields.io/badge/download-latest-brightgreen)](https://github.com/eipastel/pstranscribe-desktop/releases/latest)
 
