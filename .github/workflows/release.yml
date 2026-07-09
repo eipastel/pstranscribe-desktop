@@ -1,16 +1,21 @@
 name: Release
 
 on:
-  # 1) PR mergeada que tem a label "release" → builda a main já mesclada.
+  # 1) PR mergeada que tem a label "release" → cria a tag e publica a main mesclada.
   pull_request:
     types: [closed]
-  # 2) Release criado manualmente pela interface do GitHub (gera a tag) →
+  # 2) Release criado manualmente pela interface do GitHub (já tem tag) →
   #    builda o código da tag e anexa o instalador.
   release:
     types: [published]
 
 permissions:
   contents: write
+
+# Nunca dois releases em paralelo (evita corrida ao criar a release/tag).
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -37,16 +42,30 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      # No fluxo label+merge não existe tag ainda. Um release publicado exige tag
+      # válida (senão o electron-builder falha com 422). Criamos aqui a partir da
+      # versão do package.json (idempotente). No fluxo de release manual a tag já existe.
+      - name: Criar tag da versão (label+merge)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          v="v$(node -p "require('./package.json').version")"
+          if git ls-remote --exit-code --tags origin "$v" >/dev/null 2>&1; then
+            echo "Tag $v já existe — nada a fazer."
+          else
+            git tag "$v"
+            git push origin "$v"
+            echo "Tag $v criada."
+          fi
+
       - name: Build
         run: npm run build
 
-      # Versão vem do package.json. Publica o instalador + latest.yml no
-      # GitHub Releases (o auto-update lê de lá).
+      # Publica o instalador + latest.yml + blockmap no GitHub Releases da tag/versão.
       - name: Empacotar e publicar
         run: npx electron-builder --win --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # O gatilho de label é um evento pull_request; sem isto o electron-builder
-          # pula o publish ("build is part of pull request"). Seguro aqui: repo
-          # próprio, sem forks não confiáveis.
+          # Gatilho de label é evento pull_request; sem isto o electron-builder pula
+          # o publish. Seguro aqui: repo próprio, sem forks não confiáveis.
           PUBLISH_FOR_PULL_REQUEST: 'true'
