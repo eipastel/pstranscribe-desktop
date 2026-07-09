@@ -1,0 +1,76 @@
+/* Painel de conteúdo dentro do shell (o vidro é do .app-shell) */
+.update-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.update-head {
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.update-title {
+  font: 600 17px/1.3 var(--font-stack);
+  letter-spacing: 0.1px;
+}
+
+.update-sub {
+  font: 400 12.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 3px;
+}
+
+.update-body {
+  padding: 22px 26px 20px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.update-state {
+  font: 500 14px/1.4 var(--font-stack);
+}
+
+.update-version {
+  font: 400 12.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+}
+
+.update-error {
+  font: 400 12px/1.4 var(--font-stack);
+  color: #ff8f8f;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.update-action {
+  margin-top: 10px;
+}
+
+/* Spinner dentro do botão enquanto busca atualização. */
+.update-spin {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--fg);
+  animation: update-spin 0.7s linear infinite;
+  flex: none;
+}
+
+@keyframes update-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-spin {
+    animation: none;
+  }
+}

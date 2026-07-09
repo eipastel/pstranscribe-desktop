@@ -28,7 +28,13 @@ import {
   REALTIME_STOP_CHANNEL,
   REALTIME_DELTA_CHANNEL,
   REALTIME_ERROR_CHANNEL,
+  UPDATE_GET_CHANNEL,
+  UPDATE_CHECK_CHANNEL,
+  UPDATE_DOWNLOAD_CHANNEL,
+  UPDATE_INSTALL_CHANNEL,
+  UPDATE_STATUS_CHANNEL,
   type ProcessError,
+  type UpdateStatus,
   type WidgetApi
 } from '../shared/ipc'
 
@@ -80,6 +86,15 @@ const api: WidgetApi = {
     const listener = (_e: Electron.IpcRendererEvent, error: ProcessError): void => callback(error)
     ipcRenderer.on(REALTIME_ERROR_CHANNEL, listener)
     return () => ipcRenderer.removeListener(REALTIME_ERROR_CHANNEL, listener)
+  },
+  getUpdateStatus: () => ipcRenderer.invoke(UPDATE_GET_CHANNEL),
+  checkForUpdate: () => ipcRenderer.invoke(UPDATE_CHECK_CHANNEL),
+  downloadUpdate: () => ipcRenderer.invoke(UPDATE_DOWNLOAD_CHANNEL),
+  installUpdate: () => ipcRenderer.invoke(UPDATE_INSTALL_CHANNEL),
+  onUpdateStatus: (callback) => {
+    const listener = (_e: Electron.IpcRendererEvent, status: UpdateStatus): void => callback(status)
+    ipcRenderer.on(UPDATE_STATUS_CHANNEL, listener)
+    return () => ipcRenderer.removeListener(UPDATE_STATUS_CHANNEL, listener)
   }
 }
 

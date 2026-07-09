@@ -32,11 +32,11 @@ export function createWidgetWindow(): BrowserWindow {
     }
   })
 
-  // Click-through por padrão; o renderer desliga via IPC quando o cursor entra na pílula.
-  // ponytail: no Windows o forward de mousemove não chega com o ignore ativo (limitação
-  // do Electron em janela transparente) — o hover-toggle fica inerte até revisitarmos
-  // (ex.: polling de cursor no main) numa batch futura.
-  window.setIgnoreMouseEvents(true, { forward: true })
+  // Click-through por padrão. Sem `forward`: no Windows o forward de mousemove é
+  // inerte (o hover-toggle da pílula já não funcionava) e ainda fazia o widget
+  // (fullscreen alwaysOnTop) brigar pelo cursor, "piscando" pointer↔seta sobre a
+  // janela do app. Sem forward o cursor é ditado pela janela de baixo.
+  window.setIgnoreMouseEvents(true)
 
   // showInactive: o widget aparece sem roubar o foco do app do usuário
   window.on('ready-to-show', () => window.showInactive())
