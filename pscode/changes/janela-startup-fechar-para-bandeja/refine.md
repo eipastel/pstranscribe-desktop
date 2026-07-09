@@ -34,5 +34,5 @@ pelo "Sair" do menu da bandeja.
 
 ## Subtasks
 - [x] Abrir `openAppWindow()` no startup (`bootstrap` em `index.ts`).
-- [ ] Interceptar `close` da `appWindow` para esconder (preventDefault + hide),
+- [x] Interceptar `close` da `appWindow` para esconder (preventDefault + hide),
       com flag `isQuitting` liberada por `before-quit`.
