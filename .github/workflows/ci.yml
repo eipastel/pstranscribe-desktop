@@ -5,41 +5,71 @@ on:
     branches: [main]
   pull_request:
 
+# Um job por tarefa → cada um é um check separado no PR. Encadeados por `needs`
+# na ordem barato→caro: se um falha, os seguintes nem começam (curto-circuito).
+# format → lint → typecheck → unit-tests → build.
 jobs:
-  # Um job só, steps em ordem barato→caro. Steps param no primeiro que falhar,
-  # então format quebrado nem chega a rodar build. Ubuntu porque nada aqui é
-  # Windows-específico (nativo é mockado/externo; build só empacota).
-  ci:
-    name: ci
-    runs-on: ubuntu-latest
+  format:
+    name: format
+    runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
-      # --ignore-scripts pula o rebuild nativo (electron-builder install-app-deps):
-      # testes mockam o nativo e o build só empacota, então não precisa buildar.
       - name: Instalar dependências
-        run: npm ci --ignore-scripts
-
-      - name: Formatação
+        run: npm ci
+      - name: format
         run: npm run format:check
 
-      - name: Lint
+  lint:
+    name: lint
+    needs: format
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: lint
         run: npm run lint
 
-      - name: Typecheck
+  typecheck:
+    name: typecheck
+    needs: lint
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: typecheck
         run: npm run typecheck
 
-      # Falha se algum teste quebrar ou a cobertura da lógica pura cair <85%.
+  # Testes unitários com gate de cobertura. Ubuntu (mais rápido; o nativo é
+  # mockado). --ignore-scripts pula o rebuild nativo, que os testes não usam.
+  # test:coverage falha se algum teste quebrar ou a cobertura cair <85%.
+  unit-tests:
+    name: unit-tests
+    needs: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts
       - name: Testes + cobertura
         run: npm run test:coverage
-
       - name: Publicar cobertura no Codecov
         uses: codecov/codecov-action@v5
         with:
@@ -47,6 +77,17 @@ jobs:
           files: ./coverage/lcov.info
           fail_ci_if_error: false
 
-      # Mais caro por último: só roda se tudo acima passou.
-      - name: Build
+  build:
+    name: build
+    needs: unit-tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: build
         run: npx electron-vite build
