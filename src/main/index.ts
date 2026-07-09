@@ -33,6 +33,9 @@ function bootstrap(): void {
     startPushToTalk(window, settings.keybind)
     setToggleKeybind(settings.keybindContinuo)
 
+    // Janela principal já visível no startup (antes só subia bandeja + widget).
+    openAppWindow()
+
     // Só checa e avisa no startup; o download é manual (aba Atualização).
     registerUpdater()
     checkForUpdates()

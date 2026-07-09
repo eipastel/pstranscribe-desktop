@@ -33,6 +33,6 @@ pelo "Sair" do menu da bandeja.
 - Alterar a janela de Conceitos.
 
 ## Subtasks
-- [ ] Abrir `openAppWindow()` no startup (`bootstrap` em `index.ts`).
+- [x] Abrir `openAppWindow()` no startup (`bootstrap` em `index.ts`).
 - [ ] Interceptar `close` da `appWindow` para esconder (preventDefault + hide),
       com flag `isQuitting` liberada por `before-quit`.
