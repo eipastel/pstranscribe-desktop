@@ -74,4 +74,6 @@ export function enqueuePaste(text: string): void {
 }
 
 // Digitação não usa clipboard nem enfileira no lado do Node — nada a restaurar.
-export async function flushPasteQueue(): Promise<void> {}
+export async function flushPasteQueue(): Promise<void> {
+  /* no-op */
+}

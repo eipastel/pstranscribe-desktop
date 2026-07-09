@@ -29,7 +29,6 @@
   padding: 18px 26px 20px;
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
 }
 
 .cost-cards {
@@ -69,8 +68,6 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 360px;
-  overflow-y: auto;
 }
 
 .cost-item {

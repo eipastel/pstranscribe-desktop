@@ -4,15 +4,23 @@ export interface TranscriptionRecord {
   ts: number
   /** duração gravada (segundos do push-to-talk) */
   seconds: number
+  /** modelo de STT usado (ex.: 'gpt-4o-transcribe') */
   sttModel: string
+  /** tokens gastos na formatação (0 se não formatou) */
   formatTokens: number
+  /** custo estimado desta transcrição, em USD */
   costUsd: number
 }
 
+/** Agregados de custo exibidos na aba Custos. */
 export interface HistoryStats {
+  /** total de transcrições */
   count: number
+  /** custo acumulado, em USD */
   totalUsd: number
+  /** custo médio por transcrição, em USD */
   avgPerTranscriptionUsd: number
+  /** custo médio por minuto de áudio, em USD */
   avgPerMinuteUsd: number
 }
 

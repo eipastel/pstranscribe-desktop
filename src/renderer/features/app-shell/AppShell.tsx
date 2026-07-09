@@ -2,17 +2,22 @@ import './AppShell.css'
 import { useEffect, useState } from 'react'
 import SettingsWindow from '@/features/settings/SettingsWindow'
 import CostWindow from '@/features/cost/CostWindow'
+import ConceptsSaved from '@/features/concepts/ConceptsSaved'
 
-type Tab = 'settings' | 'custos'
+type Tab = 'settings' | 'custos' | 'conceitos'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'settings', label: 'Configurações' },
-  { id: 'custos', label: 'Custos' }
+  { id: 'custos', label: 'Custos' },
+  { id: 'conceitos', label: 'Conceitos' }
 ]
 
 // Lembra a última aba entre aberturas (nav puramente do renderer)
 const STORE_KEY = 'app.tab'
-const initialTab = (): Tab => (localStorage.getItem(STORE_KEY) === 'custos' ? 'custos' : 'settings')
+const initialTab = (): Tab => {
+  const saved = localStorage.getItem(STORE_KEY)
+  return TABS.some((t) => t.id === saved) ? (saved as Tab) : 'settings'
+}
 
 // Shell "Aplicativo": menu lateral + área de conteúdo, com um único fechar/Esc.
 export default function AppShell(): React.JSX.Element {
@@ -32,19 +37,9 @@ export default function AppShell(): React.JSX.Element {
 
   return (
     <div className="app-shell">
-      <nav className="app-nav">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            className={t.id === tab ? 'app-nav-item active' : 'app-nav-item'}
-            onClick={() => setTab(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </nav>
-      <div className="app-content">
+      {/* Barra de título: arrasta a janela (CSS -webkit-app-region: drag) */}
+      <header className="app-titlebar">
+        <span className="app-title">PSTranscribe</span>
         <button
           type="button"
           className="app-close"
@@ -61,7 +56,32 @@ export default function AppShell(): React.JSX.Element {
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>
-        {tab === 'settings' ? <SettingsWindow /> : <CostWindow />}
+      </header>
+      <div className="app-body">
+        <nav className="app-nav">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={t.id === tab ? 'app-nav-item active' : 'app-nav-item'}
+              onClick={() => setTab(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
+        <div className="app-content">
+          {/* Ambas montadas: alternar com `hidden` evita remontar (e re-buscar dados) na troca */}
+          <div className="app-pane" hidden={tab !== 'settings'}>
+            <SettingsWindow />
+          </div>
+          <div className="app-pane" hidden={tab !== 'custos'}>
+            <CostWindow />
+          </div>
+          <div className="app-pane" hidden={tab !== 'conceitos'}>
+            <ConceptsSaved />
+          </div>
+        </div>
       </div>
     </div>
   )

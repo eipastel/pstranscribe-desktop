@@ -17,7 +17,7 @@ function SettingsWindow(): React.JSX.Element {
           <div className="settings-sub">Ajuste como sua fala vira mensagem</div>
         </div>
       </div>
-      <div className="settings-body">
+      <div className="settings-body scroll-y">
         {settings && (
           <>
             <div className="settings-row">

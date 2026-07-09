@@ -3,9 +3,9 @@
 > Widget flutuante de transcrição por voz para Windows.
 
 ![Plataforma](https://img.shields.io/badge/plataforma-Windows-0078D6)
-![Electron](https://img.shields.io/badge/Electron-React%20%2B%20TS-47848F)
-[![Build](https://img.shields.io/github/actions/workflow/status/eipastel/pstranscribe-desktop/build.yml?branch=main)](https://github.com/eipastel/pstranscribe-desktop/actions)
-[![Download](https://img.shields.io/github/v/release/eipastel/pstranscribe-desktop?label=download)](https://github.com/eipastel/pstranscribe-desktop/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/eipastel/pstranscribe-desktop/ci.yml?branch=main&label=CI)](https://github.com/eipastel/pstranscribe-desktop/actions/workflows/ci.yml)
+[![Versão](https://img.shields.io/github/v/release/eipastel/pstranscribe-desktop?label=vers%C3%A3o)](https://github.com/eipastel/pstranscribe-desktop/releases/latest)
+[![Download](https://img.shields.io/badge/download-latest-brightgreen)](https://github.com/eipastel/pstranscribe-desktop/releases/latest)
 
 <!-- TODO(#6): trocar o placeholder por um GIF do fluxo push-to-talk quando o release sair -->
 
