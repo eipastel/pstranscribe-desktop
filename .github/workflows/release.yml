@@ -46,3 +46,7 @@ jobs:
         run: npx electron-builder --win --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # O gatilho de label é um evento pull_request; sem isto o electron-builder
+          # pula o publish ("build is part of pull request"). Seguro aqui: repo
+          # próprio, sem forks não confiáveis.
+          PUBLISH_FOR_PULL_REQUEST: 'true'
