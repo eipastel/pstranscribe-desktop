@@ -42,20 +42,22 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      # No fluxo label+merge não existe tag ainda. Um release publicado exige tag
-      # válida (senão o electron-builder falha com 422). Criamos aqui a partir da
-      # versão do package.json (idempotente). No fluxo de release manual a tag já existe.
-      - name: Criar tag da versão (label+merge)
+      # No fluxo label+merge não existe release/tag ainda. Pré-criamos a release
+      # (com a tag na versão do package.json) para o electron-builder apenas fazer
+      # upload nela — sem isso, uploads concorrentes criam a release em duplicata.
+      # Idempotente. No fluxo de release manual a release já existe, então pulamos.
+      - name: Pré-criar a release (label+merge)
         if: github.event_name == 'pull_request'
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           v="v$(node -p "require('./package.json').version")"
-          if git ls-remote --exit-code --tags origin "$v" >/dev/null 2>&1; then
-            echo "Tag $v já existe — nada a fazer."
+          if gh release view "$v" >/dev/null 2>&1; then
+            echo "Release $v já existe — nada a fazer."
           else
-            git tag "$v"
-            git push origin "$v"
-            echo "Tag $v criada."
+            gh release create "$v" --target "$(git rev-parse HEAD)" --title "$v" --generate-notes
+            echo "Release $v criada."
           fi
 
       - name: Build
