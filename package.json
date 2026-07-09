@@ -1,6 +1,6 @@
 {
   "name": "pstranscribe-desktop",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Floating transcription widget for Windows",
   "main": "./out/main/index.js",
   "author": "eipastel",
