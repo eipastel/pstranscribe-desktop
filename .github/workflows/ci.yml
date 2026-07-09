@@ -6,9 +6,21 @@ on:
   pull_request:
 
 jobs:
-  validate:
-    name: Validação
+  # Um job por tarefa → cada um aparece como um check separado no PR.
+  # (Jobs rodam em runners distintos; o cache npm do setup-node acelera o npm ci
+  #  de todos.)
+  check:
+    name: ${{ matrix.name }}
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Formatação, cmd: npm run format:check }
+          - { name: Lint, cmd: npm run lint }
+          - { name: Typecheck, cmd: npm run typecheck }
+          - { name: Testes unitários, cmd: npm run test }
+          - { name: Build, cmd: npx electron-vite build }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,22 +31,8 @@ jobs:
           node-version: 20
           cache: npm
 
-      # npm ci roda uma vez; os steps seguintes reaproveitam node_modules.
       - name: Instalar dependências
         run: npm ci
 
-      - name: Formatação (prettier)
-        run: npm run format:check
-
-      - name: Lint (eslint)
-        run: npm run lint
-
-      - name: Typecheck (tsc)
-        run: npm run typecheck
-
-      - name: Testes unitários (vitest)
-        run: npm run test
-
-      # typecheck já rodou acima — aqui só empacota (evita compilar de novo).
-      - name: Build (electron-vite)
-        run: npx electron-vite build
+      - name: ${{ matrix.name }}
+        run: ${{ matrix.cmd }}
