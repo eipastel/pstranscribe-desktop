@@ -1,12 +1,14 @@
 {
   "name": "pstranscribe-desktop",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Floating transcription widget for Windows",
   "main": "./out/main/index.js",
   "author": "eipastel",
   "scripts": {
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint --cache .",
+    "test": "vitest run --passWithNoTests",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
@@ -19,6 +21,7 @@
   },
   "dependencies": {
     "@electron-toolkit/utils": "^4.0.0",
+    "electron-updater": "^6.8.9",
     "uiohook-napi": "^1.5.5",
     "zustand": "^5.0.14"
   },
@@ -41,6 +44,7 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6"
+    "vite": "^7.2.6",
+    "vitest": "^4.1.10"
   }
 }

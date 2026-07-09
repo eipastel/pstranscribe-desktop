@@ -19,4 +19,8 @@ nsis:
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+publish:
+  provider: github
+  owner: eipastel
+  repo: pstranscribe-desktop
 npmRebuild: false

@@ -35,7 +35,7 @@ export default function CostWindow(): React.JSX.Element {
           <div className="cost-sub">Métricas do seu uso — {stats?.count ?? 0} transcrições</div>
         </div>
       </div>
-      <div className="cost-body">
+      <div className="cost-body scroll-y">
         <div className="cost-cards">
           <div className="cost-card">
             <div className="cost-card-value">{usd.format(stats?.totalUsd ?? 0)}</div>

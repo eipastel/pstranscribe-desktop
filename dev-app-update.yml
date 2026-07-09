@@ -1,0 +1,6 @@
+# Config de auto-update usada só em dev (electron-builder exclui do pacote).
+# Espelha o bloco `publish` do electron-builder.yml para testar o updater local.
+provider: github
+owner: eipastel
+repo: pstranscribe-desktop
+updaterCacheDirName: pstranscribe-updater

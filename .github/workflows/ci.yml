@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Um job por tarefa → cada um aparece como um check separado no PR.
+  # (Jobs rodam em runners distintos; o cache npm do setup-node acelera o npm ci
+  #  de todos.)
+  check:
+    name: ${{ matrix.name }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: Formatação, cmd: npm run format:check }
+          - { name: Lint, cmd: npm run lint }
+          - { name: Typecheck, cmd: npm run typecheck }
+          - { name: Testes unitários, cmd: npm run test }
+          - { name: Build, cmd: npx electron-vite build }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: ${{ matrix.name }}
+        run: ${{ matrix.cmd }}

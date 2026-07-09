@@ -1,7 +1,10 @@
-/* Shell do app: sidebar de vidro + área de conteúdo, na linguagem dos painéis */
+/* Shell do app: barra de título + (sidebar de vidro | área de conteúdo) */
 .app-shell {
   display: flex;
-  max-height: calc(100vh - 12px);
+  flex-direction: column;
+  /* Tamanho fixo (janela é 760x660): a caixa não muda ao trocar de aba, só o conteúdo rola */
+  width: calc(100vw - 40px);
+  height: calc(100vh - 24px);
   border-radius: 20px;
   overflow: hidden;
   background: rgb(26, 26, 29);
@@ -12,6 +15,31 @@
     0 30px 90px -18px rgba(0, 0, 0, 0.65),
     0 2px 10px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* Barra de título: arrasta a janela toda; respeita os cantos arredondados do shell */
+.app-titlebar {
+  flex: none;
+  -webkit-app-region: drag;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 14px 0 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-title {
+  font: var(--text-label);
+  color: var(--fg-sub);
+  letter-spacing: 0.02em;
+}
+
+/* Linha abaixo da barra: menu lateral + conteúdo */
+.app-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 .app-nav {
@@ -54,11 +82,20 @@
   flex-direction: column;
 }
 
+.app-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-pane[hidden] {
+  display: none;
+}
+
 .app-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 1;
+  -webkit-app-region: no-drag;
+  flex: none;
   width: 26px;
   height: 26px;
   border-radius: 50%;
