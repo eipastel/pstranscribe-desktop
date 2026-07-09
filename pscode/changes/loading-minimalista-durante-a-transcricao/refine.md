@@ -28,4 +28,4 @@ isso por **só o spinner centralizado**, sem nenhum texto.
 
 ## Subtasks
 - [x] Substituir o bloco de transcrição por só o spinner centralizado e ocultar o hint no loading (VoiceWidget.tsx + VoiceWidget.css)
-- [ ] Remover o componente TranscriptPreview (arquivo + CSS) e o uso órfão de rawText/import no VoiceWidget
+- [x] Remover o componente TranscriptPreview (arquivo + CSS) e o uso órfão de rawText/import no VoiceWidget

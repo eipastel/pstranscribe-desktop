@@ -23,4 +23,3 @@ Uma pasta por componente, com o `.tsx` e seu `.css` de mesmo nome:
 | `StatusLabel`       | texto de status                         |
 | `Timer`             | contador de tempo (duração da gravação) |
 | `Waveform`          | visualização das barras de áudio        |
-| `TranscriptPreview` | prévia do texto transcrito              |
