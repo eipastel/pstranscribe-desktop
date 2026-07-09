@@ -19,7 +19,6 @@ jobs:
           - { name: format, cmd: npm run format:check }
           - { name: lint, cmd: npm run lint }
           - { name: typecheck, cmd: npm run typecheck }
-          - { name: unit-tests, cmd: npm run test }
           - { name: build, cmd: npx electron-vite build }
     steps:
       - name: Checkout
@@ -36,3 +35,34 @@ jobs:
 
       - name: ${{ matrix.name }}
         run: ${{ matrix.cmd }}
+
+  # Testes unitários com gate de cobertura. Job próprio no ubuntu (mais rápido; o
+  # nativo é mockado). test:coverage falha se algum teste quebrar ou a cobertura
+  # da lógica pura cair abaixo de 85% → barra o merge.
+  unit-tests:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # --ignore-scripts pula o rebuild nativo (electron-builder install-app-deps):
+      # os testes mockam o nativo (uiohook/electron), então não precisa buildar.
+      - name: Instalar dependências
+        run: npm ci --ignore-scripts
+
+      - name: Testes + cobertura
+        run: npm run test:coverage
+
+      - name: Publicar cobertura no Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
