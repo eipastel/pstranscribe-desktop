@@ -5,64 +5,87 @@ on:
     branches: [main]
   pull_request:
 
+# Um job por tarefa → cada um é um check separado no PR. format/lint/typecheck
+# rodam em paralelo; unit-tests só começa se os três passarem; build por último.
+# Se algum falha, o resto não roda (curto-circuito via `needs`).
 jobs:
-  # Um job por tarefa → cada um aparece como um check separado no PR.
-  # (Jobs rodam em runners distintos; o cache npm do setup-node acelera o npm ci
-  #  de todos.)
-  check:
-    name: ${{ matrix.name }}
+  format:
+    name: format
     runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { name: format, cmd: npm run format:check }
-          - { name: lint, cmd: npm run lint }
-          - { name: typecheck, cmd: npm run typecheck }
-          - { name: build, cmd: npx electron-vite build }
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
       - name: Instalar dependências
         run: npm ci
+      - name: format
+        run: npm run format:check
 
-      - name: ${{ matrix.name }}
-        run: ${{ matrix.cmd }}
-
-  # Testes unitários com gate de cobertura. Job próprio no ubuntu (mais rápido; o
-  # nativo é mockado). test:coverage falha se algum teste quebrar ou a cobertura
-  # da lógica pura cair abaixo de 85% → barra o merge.
-  unit-tests:
-    name: unit-tests
-    runs-on: ubuntu-latest
+  lint:
+    name: lint
+    runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: lint
+        run: npm run lint
 
-      # --ignore-scripts pula o rebuild nativo (electron-builder install-app-deps):
-      # os testes mockam o nativo (uiohook/electron), então não precisa buildar.
+  typecheck:
+    name: typecheck
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: typecheck
+        run: npm run typecheck
+
+  # Testes unitários com gate de cobertura. Ubuntu (mais rápido; o nativo é
+  # mockado). --ignore-scripts pula o rebuild nativo, que os testes não usam.
+  # test:coverage falha se algum teste quebrar ou a cobertura cair <85%.
+  unit-tests:
+    name: unit-tests
+    needs: [format, lint, typecheck]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
       - name: Instalar dependências
         run: npm ci --ignore-scripts
-
       - name: Testes + cobertura
         run: npm run test:coverage
-
       - name: Publicar cobertura no Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
           fail_ci_if_error: false
+
+  build:
+    name: build
+    needs: unit-tests
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Instalar dependências
+        run: npm ci
+      - name: build
+        run: npx electron-vite build

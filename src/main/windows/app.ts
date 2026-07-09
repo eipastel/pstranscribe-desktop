@@ -1,9 +1,16 @@
-import { BrowserWindow } from 'electron'
+import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../../resources/icon.png?asset'
 
 let appWindow: BrowserWindow | null = null
+let isQuitting = false
+
+// Só o "Sair" da bandeja (app.quit → before-quit) encerra de verdade; a partir
+// daí o handler de `close` deixa a janela fechar em vez de só esconder.
+app.on('before-quit', () => {
+  isQuitting = true
+})
 
 // Janela única "Aplicativo": shell com menu lateral (Configurações / Custos).
 export function openAppWindow(): void {
@@ -31,6 +38,16 @@ export function openAppWindow(): void {
   })
 
   appWindow.on('ready-to-show', () => appWindow?.show())
+
+  // X e Escape disparam window.close() no renderer; escondemos pra bandeja em
+  // vez de destruir, preservando o estado. Sair de verdade só pela bandeja.
+  appWindow.on('close', (e) => {
+    if (!isQuitting) {
+      e.preventDefault()
+      appWindow?.hide()
+    }
+  })
+
   appWindow.on('closed', () => {
     appWindow = null
   })
