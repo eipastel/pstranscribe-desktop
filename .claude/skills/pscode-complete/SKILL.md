@@ -32,7 +32,7 @@ ask via `AskUserQuestion` (`Sim` / `Não`, recommended first), never as plain pr
    `pscode/changes/archive/<YYYY-MM-DD>-<slug>/` (use today's date).
 4. If `pscode/github.yaml` exists, use `pscode-github-sync`: **move the card →
    Done** (`done`) and confirm it landed, comment the conclusion, then **close**
-   the Issue.
+   the Issue. Merging the PR stays human/CI.
 
 ## Cancel path (`/ps:cancel`)
 

@@ -21,8 +21,8 @@ without approval, and each step moves the card to the matching column (via
    (summary, technical detail, scope, `## Subtasks` — mirrored as native
    **sub-issues** on the card). Uses `pscode-refine`.
 3. **`/ps:dev <card#>`** → **In Development** → **In Code Review** → **In Test**
-   → **Ready to Deploy**. Implement one subtask at a
-   time on the current branch and walk the card across the columns. Uses
+   → **Ready to Deploy**. Open a draft PR, implement one subtask at a time,
+   and walk the card across the columns. Uses
    `pscode-dev` + `pscode-task-runner`.
 4. **`/ps:complete <card#>`** → **Done**. Write a short delta spec and archive
    the change. Uses `pscode-complete`. (`/ps:cancel` → **Cancelled**.)
