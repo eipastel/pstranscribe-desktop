@@ -3,13 +3,15 @@ import { useEffect, useState } from 'react'
 import SettingsWindow from '@/features/settings/SettingsWindow'
 import CostWindow from '@/features/cost/CostWindow'
 import ConceptsSaved from '@/features/concepts/ConceptsSaved'
+import UpdateWindow from '@/features/update/UpdateWindow'
 
-type Tab = 'settings' | 'custos' | 'conceitos'
+type Tab = 'settings' | 'custos' | 'conceitos' | 'atualizacao'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'settings', label: 'Configurações' },
   { id: 'custos', label: 'Custos' },
-  { id: 'conceitos', label: 'Conceitos' }
+  { id: 'conceitos', label: 'Conceitos' },
+  { id: 'atualizacao', label: 'Atualização' }
 ]
 
 // Lembra a última aba entre aberturas (nav puramente do renderer)
@@ -80,6 +82,9 @@ export default function AppShell(): React.JSX.Element {
           </div>
           <div className="app-pane" hidden={tab !== 'conceitos'}>
             <ConceptsSaved />
+          </div>
+          <div className="app-pane" hidden={tab !== 'atualizacao'}>
+            <UpdateWindow />
           </div>
         </div>
       </div>

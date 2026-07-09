@@ -26,6 +26,10 @@ import {
   REALTIME_STOP_CHANNEL,
   REALTIME_DELTA_CHANNEL,
   REALTIME_ERROR_CHANNEL,
+  UPDATE_GET_CHANNEL,
+  UPDATE_CHECK_CHANNEL,
+  UPDATE_DOWNLOAD_CHANNEL,
+  UPDATE_INSTALL_CHANNEL,
   type HistoryPayload,
   type ProcessResult,
   type PublicSettings,
@@ -54,6 +58,7 @@ import { setPttKeybind } from '../ptt'
 import { app } from 'electron'
 import { getWidgetWindow } from '../windows/widget'
 import { openConceptsWindow } from '../windows/concepts'
+import { currentUpdateStatus, checkForUpdates, downloadUpdate, installUpdate } from '../updater'
 
 function broadcastKeyChanged(): void {
   BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(KEY_CHANGED_CHANNEL))
@@ -218,6 +223,12 @@ export function registerIpcHandlers(): void {
     realtimeSession = null
     await flushPasteQueue() // sem mais deltas: devolve o clipboard do usuário
   })
+
+  // Atualização do app: a UI pede o snapshot atual e dispara checar/baixar/instalar.
+  ipcMain.handle(UPDATE_GET_CHANNEL, () => currentUpdateStatus())
+  ipcMain.handle(UPDATE_CHECK_CHANNEL, () => checkForUpdates())
+  ipcMain.handle(UPDATE_DOWNLOAD_CHANNEL, () => downloadUpdate())
+  ipcMain.handle(UPDATE_INSTALL_CHANNEL, () => installUpdate())
 
   // Hover na pílula desliga o ignore para receber cliques; fora dela, tudo atravessa
   ipcMain.on(SET_IGNORE_MOUSE_CHANNEL, (event, ignore: boolean) => {

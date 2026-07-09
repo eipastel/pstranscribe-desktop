@@ -1,6 +1,6 @@
 import { app } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { autoUpdater } from 'electron-updater'
+import { registerUpdater, checkForUpdates } from './updater'
 import { createWidgetWindow } from './windows/widget'
 import { registerIpcHandlers } from './ipc/handlers'
 import { loadSettings } from './settings'
@@ -21,8 +21,9 @@ app.whenReady().then(() => {
   window.setOpacity(settings.opacity)
   startPushToTalk(window, settings.keybind)
 
-  // Busca updates no GitHub Releases e notifica. No-op quando não empacotado.
-  void autoUpdater.checkForUpdatesAndNotify()
+  // Só checa e avisa no startup; o download é manual (aba Atualização).
+  registerUpdater()
+  checkForUpdates()
 })
 
 app.on('window-all-closed', () => {

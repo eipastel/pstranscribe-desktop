@@ -49,6 +49,30 @@ export const CONCEPTS_SAVED_CHANNEL = 'concepts:saved'
 export const CONCEPTS_SET_CHANNEL = 'concepts:set'
 export const CONCEPTS_REMOVE_CHANNEL = 'concepts:remove'
 
+// Atualização do app (electron-updater lendo dos GitHub Releases).
+export const UPDATE_GET_CHANNEL = 'update:get' // snapshot do estado atual
+export const UPDATE_CHECK_CHANNEL = 'update:check'
+export const UPDATE_DOWNLOAD_CHANNEL = 'update:download'
+export const UPDATE_INSTALL_CHANNEL = 'update:install' // reinicia e aplica
+export const UPDATE_STATUS_CHANNEL = 'update:status' // main → renderer, a cada mudança
+
+/** Estados do fluxo de atualização, na ordem em que a UI os mostra. */
+export type UpdateState =
+  'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error'
+
+/** Snapshot do updater enviado ao renderer. */
+export interface UpdateStatus {
+  state: UpdateState
+  /** Versão instalada agora (`app.getVersion()`). */
+  version: string
+  /** Versão nova, quando `state` é `available`/`downloading`/`downloaded`. */
+  available?: string
+  /** Progresso do download em % (0–100), durante `downloading`. */
+  percent?: number
+  /** Mensagem de erro, quando `state` é `error`. */
+  error?: string
+}
+
 export interface HistoryPayload {
   /** registros mais recentes primeiro */
   records: TranscriptionRecord[]
@@ -136,4 +160,14 @@ export interface WidgetApi {
   setCorrection(wrong: string, right: string): Promise<void>
   /** Remove um conceito salvo. */
   removeConcept(term: string): Promise<void>
+  /** Estado atual do updater (para a aba Atualização se sincronizar ao abrir). */
+  getUpdateStatus(): Promise<UpdateStatus>
+  /** Dispara uma checagem por versão nova nos Releases. */
+  checkForUpdate(): Promise<void>
+  /** Baixa a versão detectada como disponível. */
+  downloadUpdate(): Promise<void>
+  /** Reinicia o app e instala o update já baixado. */
+  installUpdate(): Promise<void>
+  /** Avisa a cada mudança de estado do updater. */
+  onUpdateStatus(callback: (status: UpdateStatus) => void): () => void
 }
