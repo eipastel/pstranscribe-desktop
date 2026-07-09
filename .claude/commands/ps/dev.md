@@ -1,6 +1,6 @@
 ---
 name: "ps:dev"
-description: "Develops a Ready-to-Dev card: moves to In Development, implements one subtask at a time on the current branch, then walks the card through Code Review → Test → Ready to Deploy."
+description: "Develops a Ready-to-Dev card: opens a draft PR, moves to In Development, implements one subtask at a time, then walks the card through Code Review → Test → Ready to Deploy."
 generatedBy: 3.1.2
 ---
 
@@ -15,9 +15,9 @@ scope mid-subtask.
 ## Start (if `pscode/github.yaml` exists)
 
 Use the **pscode-github-sync** skill, in order:
-1. **Move the card → In Development** (`in_progress`) — confirm the move landed.
-2. **Assign the user.** The assign does not replace the status move; both must
-   run. Work directly on the current branch — no PR is opened.
+1. Open the **PR as a draft** and link it to the Issue (`Closes #<card>`).
+2. **Move the card → In Development** (`in_progress`) and **assign the user** —
+   the assign does not replace the status move; confirm the move landed.
 
 ## Implement
 
@@ -32,8 +32,8 @@ Use the **pscode-github-sync** skill, in order:
    plain prose. After ticking, **close its sub-issue** on the card. Repeat for
    each subtask.
 5. When every subtask is done **and the project builds and its tests pass** (use
-   the project's own build/test commands), move the card →
-   **In Code Review** (`review`).
+   the project's own build/test commands), mark the PR **Ready for Review**
+   and move the card → **In Code Review** (`review`).
 6. With the user's approval (ask via `AskUserQuestion`, `Sim` / `Não`), move the
    card → **In Test** (`in_test`).
 7. Once the user confirms it is **working** (via `AskUserQuestion`), move the card → **Ready to Deploy**
@@ -41,5 +41,6 @@ Use the **pscode-github-sync** skill, in order:
    in a fenced block).
 
 Each of steps 5–7 **moves the card** on the board — confirm every move landed,
-don't leave the card behind. `gh` calls are non-blocking only on failure, never
+don't leave the card behind. Merging the PR stays a human/CI decision —
+never merge here. `gh` calls are non-blocking only on failure, never
 optional.

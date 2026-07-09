@@ -4,7 +4,7 @@ import { registerUpdater, checkForUpdates } from './updater'
 import { createWidgetWindow } from './windows/widget'
 import { registerIpcHandlers } from './ipc/handlers'
 import { loadSettings } from './settings'
-import { startPushToTalk } from './ptt'
+import { startPushToTalk, setToggleKeybind } from './ptt'
 import { createTray } from './tray'
 
 app.whenReady().then(() => {
@@ -20,6 +20,7 @@ app.whenReady().then(() => {
   const window = createWidgetWindow()
   window.setOpacity(settings.opacity)
   startPushToTalk(window, settings.keybind)
+  setToggleKeybind(settings.keybindContinuo)
 
   // Só checa e avisa no startup; o download é manual (aba Atualização).
   registerUpdater()
