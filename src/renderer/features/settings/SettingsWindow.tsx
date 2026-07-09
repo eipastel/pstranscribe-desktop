@@ -61,7 +61,20 @@ function SettingsWindow(): React.JSX.Element {
                 ariaLabel="Resposta rápida"
               />
             </div>
-            <KeybindRow settings={settings} update={update} />
+            <KeybindRow
+              settings={settings}
+              update={update}
+              field="keybind"
+              label="Atalho para falar"
+              desc="Segure para gravar, solte para colar"
+            />
+            <KeybindRow
+              settings={settings}
+              update={update}
+              field="keybindContinuo"
+              label="Atalho contínuo"
+              desc="Toque para começar, toque de novo para colar"
+            />
             <div className="settings-row">
               <div className="settings-row-text">
                 <div className="settings-row-label">Iniciar com o Windows</div>

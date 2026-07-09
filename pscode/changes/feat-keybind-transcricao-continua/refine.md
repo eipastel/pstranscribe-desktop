@@ -50,4 +50,4 @@ que sem manter a tecla pressionada. Configurável nas Configurações.
 - [x] `ptt.ts`: registrar o keybind de toggle, alternar PTT_PRESS/RELEASE com debounce e exclusão mútua com o hold.
 - [x] `ptt.ts`: auto-stop de segurança (teto de tempo) que emite PTT_RELEASE.
 - [x] Live update do keybind contínuo (`setToggleKeybind` em `handlers.ts`) e passar na init em `index.ts`.
-- [ ] Parametrizar `KeybindRow` e adicionar a 2ª linha nas Configurações.
+- [x] Parametrizar `KeybindRow` e adicionar a 2ª linha nas Configurações.
