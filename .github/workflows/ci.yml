@@ -7,7 +7,7 @@ on:
 
 jobs:
   validate:
-    name: Lint · Typecheck · Build
+    name: Validação
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -19,14 +19,22 @@ jobs:
           node-version: 20
           cache: npm
 
+      # npm ci roda uma vez; os steps seguintes reaproveitam node_modules.
       - name: Instalar dependências
         run: npm ci
 
-      - name: Lint
+      - name: Formatação (prettier)
+        run: npm run format:check
+
+      - name: Lint (eslint)
         run: npm run lint
 
-      - name: Typecheck
+      - name: Typecheck (tsc)
         run: npm run typecheck
 
-      - name: Build
-        run: npm run build
+      - name: Testes unitários (vitest)
+        run: npm run test
+
+      # typecheck já rodou acima — aqui só empacota (evita compilar de novo).
+      - name: Build (electron-vite)
+        run: npx electron-vite build

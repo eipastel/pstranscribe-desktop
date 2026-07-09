@@ -31,7 +31,11 @@ function SettingsWindow(): React.JSX.Element {
                 ariaLabel="Transcrever"
               />
             </div>
-            <div className={settings.transcrever && !FORMAT_LOCKED ? 'settings-row' : 'settings-row dim'}>
+            <div
+              className={
+                settings.transcrever && !FORMAT_LOCKED ? 'settings-row' : 'settings-row dim'
+              }
+            >
               <div className="settings-row-text">
                 <div className="settings-row-label">Formatar</div>
                 <div className="settings-row-desc">
