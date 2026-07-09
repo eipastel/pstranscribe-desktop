@@ -23,4 +23,6 @@ publish:
   provider: github
   owner: eipastel
   repo: pstranscribe-desktop
+  # Publica o release direto (não como draft) — o auto-update lê de releases publicados.
+  releaseType: release
 npmRebuild: false
