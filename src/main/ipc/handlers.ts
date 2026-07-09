@@ -30,6 +30,8 @@ import {
   UPDATE_CHECK_CHANNEL,
   UPDATE_DOWNLOAD_CHANNEL,
   UPDATE_INSTALL_CHANNEL,
+  LOGS_GET_CHANNEL,
+  LOGS_CLEAR_CHANNEL,
   type HistoryPayload,
   type ProcessResult,
   type PublicSettings,
@@ -55,6 +57,8 @@ import {
 import { computeStats } from '../../shared/history'
 import { pasteText, enqueuePaste, flushPasteQueue, warmPaste } from '../paste'
 import { setPttKeybind, setToggleKeybind } from '../ptt'
+import { setCapture } from '../capture'
+import { readLogs, clearLogs } from '../logs'
 import { app } from 'electron'
 import { getWidgetWindow } from '../windows/widget'
 import { openConceptsWindow } from '../windows/concepts'
@@ -95,6 +99,7 @@ export function registerIpcHandlers(): void {
     if (safePatch.autoLaunch !== undefined)
       app.setLoginItemSettings({ openAtLogin: safePatch.autoLaunch })
     if (safePatch.opacity !== undefined) getWidgetWindow()?.setOpacity(safePatch.opacity)
+    if (safePatch.debugLogs !== undefined) setCapture(safePatch.debugLogs)
     BrowserWindow.getAllWindows().forEach((w) => w.webContents.send(SETTINGS_CHANGED_CHANNEL))
     return publicSettings()
   })
@@ -230,6 +235,9 @@ export function registerIpcHandlers(): void {
   ipcMain.handle(UPDATE_CHECK_CHANNEL, () => checkForUpdates())
   ipcMain.handle(UPDATE_DOWNLOAD_CHANNEL, () => downloadUpdate())
   ipcMain.handle(UPDATE_INSTALL_CHANNEL, () => installUpdate())
+
+  ipcMain.handle(LOGS_GET_CHANNEL, () => readLogs())
+  ipcMain.handle(LOGS_CLEAR_CHANNEL, () => clearLogs())
 
   // Hover na pílula desliga o ignore para receber cliques; fora dela, tudo atravessa
   ipcMain.on(SET_IGNORE_MOUSE_CHANNEL, (event, ignore: boolean) => {

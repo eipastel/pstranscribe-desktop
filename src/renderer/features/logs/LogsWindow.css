@@ -1,0 +1,87 @@
+/* Painel de conteúdo dentro do shell (o vidro é do .app-shell) */
+.logs-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.logs-head {
+  padding: 24px 26px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.logs-title {
+  font: 600 17px/1.3 var(--font-stack);
+  letter-spacing: 0.1px;
+}
+
+.logs-sub {
+  font: 400 12.5px/1.3 var(--font-stack);
+  color: var(--fg-sub);
+  margin-top: 3px;
+}
+
+.logs-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.logs-body {
+  padding: 14px 26px 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.logs-empty {
+  padding: 26px 0;
+  text-align: center;
+  color: var(--fg-sub);
+  font: 400 13px/1.4 var(--font-stack);
+}
+
+.logs-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.logs-item {
+  display: flex;
+  gap: 10px;
+  padding: 6px 2px;
+  font:
+    400 12px/1.5 ui-monospace,
+    'Cascadia Code',
+    'Consolas',
+    monospace;
+}
+
+.logs-item + .logs-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logs-item-time {
+  flex: none;
+  color: var(--fg-sub);
+  font-variant-numeric: tabular-nums;
+}
+
+.logs-item-text {
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.logs-warn .logs-item-text {
+  color: #e9b949;
+}
+
+.logs-error .logs-item-text {
+  color: #ef6b6b;
+}

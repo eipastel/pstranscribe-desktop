@@ -33,6 +33,9 @@ import {
   UPDATE_DOWNLOAD_CHANNEL,
   UPDATE_INSTALL_CHANNEL,
   UPDATE_STATUS_CHANNEL,
+  LOGS_GET_CHANNEL,
+  LOGS_CLEAR_CHANNEL,
+  LOGS_CHANGED_CHANNEL,
   type ProcessError,
   type UpdateStatus,
   type WidgetApi
@@ -95,7 +98,10 @@ const api: WidgetApi = {
     const listener = (_e: Electron.IpcRendererEvent, status: UpdateStatus): void => callback(status)
     ipcRenderer.on(UPDATE_STATUS_CHANNEL, listener)
     return () => ipcRenderer.removeListener(UPDATE_STATUS_CHANNEL, listener)
-  }
+  },
+  getLogs: () => ipcRenderer.invoke(LOGS_GET_CHANNEL),
+  clearLogs: () => ipcRenderer.invoke(LOGS_CLEAR_CHANNEL),
+  onLogsChanged: (callback) => subscribe(LOGS_CHANGED_CHANNEL, callback)
 }
 
 contextBridge.exposeInMainWorld('api', api)

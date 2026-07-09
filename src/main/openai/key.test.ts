@@ -21,7 +21,8 @@ const base: Settings = {
   respostaRapida: false,
   autoLaunch: false,
   opacity: 1,
-  onboarded: false
+  onboarded: false,
+  debugLogs: false
 }
 
 // Chave "sk-test1234" já no formato que loadApiKey espera (base64 do ciphertext do mock).

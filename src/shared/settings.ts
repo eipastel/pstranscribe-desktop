@@ -23,6 +23,8 @@ export interface Settings {
   opacity: number
   /** Onboarding de primeiro uso concluído */
   onboarded: boolean
+  /** Modo debug: captura logs do app numa aba dedicada (desligado = sem captura) */
+  debugLogs: boolean
 }
 
 // ponytail: bloqueio temporário da formatação — trocar para false devolve a opção.
@@ -36,7 +38,8 @@ export const DEFAULT_SETTINGS: Settings = {
   respostaRapida: false,
   autoLaunch: false,
   opacity: 1,
-  onboarded: false
+  onboarded: false,
+  debugLogs: false
 }
 
 // Partes do atalho para exibição (ex.: ['Ctrl', 'P'] no keycap do widget)

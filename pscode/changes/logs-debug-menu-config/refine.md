@@ -43,8 +43,8 @@ crashes. Desligada (padrão), o app não captura nem grava nada.
 
 ## Subtasks
 
-- [ ] Adicionar `debugLogs` (padrão `false`) em `shared/settings.ts`.
-- [ ] Criar `src/main/logs.ts`: ring buffer + `logs.json` (cap/rotação, escrita com throttle) e API `append/read/clear`.
-- [ ] Ligar captura ao toggle: patch de `console.*` do main, ponte do renderer e handlers de crash/erros não-tratados, ativos só com `debugLogs`.
-- [ ] Expor IPC `logs:get`/`logs:clear` + broadcast `logs:changed` (ipc.ts, handlers.ts, preload).
-- [ ] UI: toggle no fim de `SettingsWindow` e aba "Logs" condicional no `AppShell` com lista + "Copiar tudo" e "Limpar".
+- [x] Adicionar `debugLogs` (padrão `false`) em `shared/settings.ts`.
+- [x] Criar `src/main/logs.ts`: ring buffer + `logs.json` (cap/rotação, escrita com throttle) e API `append/read/clear`.
+- [x] Ligar captura ao toggle: patch de `console.*` do main, ponte do renderer e handlers de crash/erros não-tratados, ativos só com `debugLogs`.
+- [x] Expor IPC `logs:get`/`logs:clear` + broadcast `logs:changed` (ipc.ts, handlers.ts, preload).
+- [x] UI: toggle no fim de `SettingsWindow` e aba "Logs" condicional no `AppShell` com lista + "Copiar tudo" e "Limpar".
