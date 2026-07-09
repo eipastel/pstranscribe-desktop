@@ -71,3 +71,20 @@ jobs:
           # Gatilho de label é evento pull_request; sem isto o electron-builder pula
           # o publish. Seguro aqui: repo próprio, sem forks não confiáveis.
           PUBLISH_FOR_PULL_REQUEST: 'true'
+
+      # Publicou → incrementa o patch na main para o próximo release já sair com
+      # versão nova, sem intervenção manual. Só no fluxo label+merge (no release
+      # manual quem define a versão é você). [skip ci] evita rodar o CI no bump.
+      - name: Bump da próxima versão (label+merge)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B main origin/main
+          npm version patch --no-git-tag-version
+          nv=$(node -p "require('./package.json').version")
+          git commit -am "chore: bump para v$nv [skip ci]"
+          git push origin main
+          echo "Versão da main agora: $nv"
