@@ -15,6 +15,7 @@ import { safeStorage } from 'electron'
 
 const base: Settings = {
   keybind: { ctrl: true, alt: false, shift: false, key: 'P' },
+  keybindContinuo: { ctrl: true, alt: false, shift: true, key: 'Space' },
   transcrever: true,
   formatar: true,
   respostaRapida: false,

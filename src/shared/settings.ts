@@ -7,6 +7,8 @@ export interface Keybind {
 
 export interface Settings {
   keybind: Keybind
+  /** Atalho de toque para ligar/desligar a transcrição contínua (padrão Ctrl+Shift+Space) */
+  keybindContinuo: Keybind
   /** Chave OpenAI criptografada com safeStorage, em base64 — nunca em texto puro */
   apiKeyEncrypted?: string
   /** Converte fala em texto (desligado = PTT não faz nada) */
@@ -28,6 +30,7 @@ export const FORMAT_LOCKED = true
 
 export const DEFAULT_SETTINGS: Settings = {
   keybind: { ctrl: true, alt: false, shift: false, key: 'P' },
+  keybindContinuo: { ctrl: true, alt: false, shift: true, key: 'Space' },
   transcrever: true,
   formatar: true,
   respostaRapida: false,

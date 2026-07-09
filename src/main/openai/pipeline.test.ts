@@ -17,6 +17,7 @@ const audio = Buffer.from('pcm')
 const settings = (over: Partial<Settings>): Settings =>
   ({
     keybind: { ctrl: true, alt: false, shift: false, key: 'P' },
+    keybindContinuo: { ctrl: true, alt: false, shift: true, key: 'Space' },
     transcrever: true,
     formatar: true,
     respostaRapida: false,
