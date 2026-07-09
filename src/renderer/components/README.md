@@ -12,15 +12,14 @@ Uma pasta por componente, com o `.tsx` e seu `.css` de mesmo nome:
 
 ## Inventário
 
-| Componente          | Papel                                   |
-| ------------------- | --------------------------------------- |
-| `Button`            | botão base                              |
-| `Input`             | campo de texto                          |
-| `Toggle`            | switch on/off                           |
-| `Pill`              | rótulo/badge arredondado                |
-| `CheckIcon`         | ícone de check                          |
-| `StatusDot`         | bolinha de status (cor por estado)      |
-| `StatusLabel`       | texto de status                         |
-| `Timer`             | contador de tempo (duração da gravação) |
-| `Waveform`          | visualização das barras de áudio        |
-| `TranscriptPreview` | prévia do texto transcrito              |
+| Componente    | Papel                                   |
+| ------------- | --------------------------------------- |
+| `Button`      | botão base                              |
+| `Input`       | campo de texto                          |
+| `Toggle`      | switch on/off                           |
+| `Pill`        | rótulo/badge arredondado                |
+| `CheckIcon`   | ícone de check                          |
+| `StatusDot`   | bolinha de status (cor por estado)      |
+| `StatusLabel` | texto de status                         |
+| `Timer`       | contador de tempo (duração da gravação) |
+| `Waveform`    | visualização das barras de áudio        |
