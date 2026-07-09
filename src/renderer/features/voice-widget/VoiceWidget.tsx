@@ -74,7 +74,7 @@ function VoiceWidget(): React.JSX.Element {
     <div className="voice-widget">
       <div className="vw-pill">
         <div {...hoverHandlers}>
-          <Pill tall={status === 'transcribing'} ariaLabel={HINTS[status]}>
+          <Pill ariaLabel={HINTS[status]}>
             {status === 'listening' && (
               <div className="vw-row">
                 <span className="vw-dot" aria-hidden="true" />
