@@ -35,4 +35,4 @@ no Windows.
 - [x] Criar hook `useInteractiveWindow`: mount → `setIgnoreMouseEvents(false)`, unmount → `setIgnoreMouseEvents(true)`.
 - [x] `Onboarding`: usar `useInteractiveWindow` e remover `useClickThrough`.
 - [x] `KeyGate`: usar `useInteractiveWindow` e remover `useClickThrough`.
-- [ ] Validar no app: onboarding clicável (chave → atalho → começar), KeyGate standalone clicável, e voltar ao VoiceWidget restaura o click-through sem piscar o cursor.
+- [x] Validar no app: onboarding clicável (chave → atalho → começar), KeyGate standalone clicável, e voltar ao VoiceWidget restaura o click-through sem piscar o cursor.
