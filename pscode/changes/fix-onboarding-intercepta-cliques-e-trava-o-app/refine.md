@@ -32,7 +32,7 @@ no Windows.
 - Redesign ou mudança de conteúdo do onboarding.
 
 ## Subtasks
-- [ ] Criar hook `useInteractiveWindow`: mount → `setIgnoreMouseEvents(false)`, unmount → `setIgnoreMouseEvents(true)`.
-- [ ] `Onboarding`: usar `useInteractiveWindow` e remover `useClickThrough`.
-- [ ] `KeyGate`: usar `useInteractiveWindow` e remover `useClickThrough`.
+- [x] Criar hook `useInteractiveWindow`: mount → `setIgnoreMouseEvents(false)`, unmount → `setIgnoreMouseEvents(true)`.
+- [x] `Onboarding`: usar `useInteractiveWindow` e remover `useClickThrough`.
+- [x] `KeyGate`: usar `useInteractiveWindow` e remover `useClickThrough`.
 - [ ] Validar no app: onboarding clicável (chave → atalho → começar), KeyGate standalone clicável, e voltar ao VoiceWidget restaura o click-through sem piscar o cursor.
