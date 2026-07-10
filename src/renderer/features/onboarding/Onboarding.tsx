@@ -2,7 +2,7 @@ import './Onboarding.css'
 import { useEffect, useState } from 'react'
 import Button from '@/components/Button/Button'
 import KeyGate from '@/features/key-gate/KeyGate'
-import { useClickThrough } from '@/hooks/useClickThrough'
+import { useInteractiveWindow } from '@/hooks/useInteractiveWindow'
 import { useKeybindCapture } from '@/hooks/useKeybindCapture'
 import { useWidgetStore } from '@/state/widget'
 import { keybindParts, type Keybind } from '@shared/settings'
@@ -17,7 +17,7 @@ function Onboarding({ onDone }: OnboardingProps): React.JSX.Element {
   const [stepState, setStep] = useState(1)
   const [keybind, setKeybind] = useState<Keybind | null>(null)
   const [capturing, setCapturing] = useState(false)
-  const hoverHandlers = useClickThrough()
+  useInteractiveWindow()
 
   // chave validada na porta avança o passo 1 → 2 (derivado, sem setState em effect)
   const step = stepState === 1 && hasKey ? 2 : stepState
@@ -42,7 +42,7 @@ function Onboarding({ onDone }: OnboardingProps): React.JSX.Element {
   const chips = keybind ? keybindParts(keybind) : []
 
   return (
-    <div className="onboarding" {...hoverHandlers}>
+    <div className="onboarding">
       {step === 1 && <KeyGate />}
       {step === 2 && (
         <div className="onboarding-panel">

@@ -2,7 +2,7 @@ import './KeyGate.css'
 import { useState } from 'react'
 import Input, { type FieldStatus } from '@/components/Input/Input'
 import Button from '@/components/Button/Button'
-import { useClickThrough } from '@/hooks/useClickThrough'
+import { useInteractiveWindow } from '@/hooks/useInteractiveWindow'
 import { useWidgetStore } from '@/state/widget'
 import type { KeyErrorCode } from '@shared/ipc'
 
@@ -18,7 +18,7 @@ function KeyGate(): React.JSX.Element {
   const [key, setKey] = useState('')
   const [status, setStatus] = useState<FieldStatus>('idle')
   const [message, setMessage] = useState('Cole sua chave da OpenAI para começar')
-  const hoverHandlers = useClickThrough()
+  useInteractiveWindow()
   const setHasKey = useWidgetStore((s) => s.setHasKey)
 
   const submit = async (): Promise<void> => {
@@ -37,7 +37,7 @@ function KeyGate(): React.JSX.Element {
   }
 
   return (
-    <div className="key-gate" {...hoverHandlers}>
+    <div className="key-gate">
       <div className="key-gate-title">Conecte sua chave OpenAI</div>
       <form
         className="key-gate-row"
